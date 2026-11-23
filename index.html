@@ -3,45 +3,75 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Dos Santos Jesus Study Guide">
 <title>Dos Santos Jesus Study Guide</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Dos Santos Jesus Study Guide: Measuring Instruments revision questions with answers.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Instrument+Sans:wght@400;500;600&display=swap">
 <style>
-  /* Layout: a single quiet column; the title is the only statement, the rest is open page waiting for content. */
+  /* Layout: one quiet column. Title up top, a sticky bar with Open all, then each question as a row that drops down to its answer. */
   :root {
     --bg: #f6f7f9;
+    --surface: #ffffff;
     --fg: #1a2130;
     --muted: #5f6878;
     --accent: #34529c;
+    --accent-soft: #e8edf7;
+    --on-accent: #ffffff;
     --rule: #d9dde5;
+    --ok: #1f7a4d;
+    --ok-soft: #e2f2e9;
+    --no: #a63d3d;
+    --no-soft: #f7e6e6;
+    --maybe: #8a6a12;
+    --maybe-soft: #f6eed8;
     --font-display: "Cormorant Garamond", "Garamond", "Iowan Old Style", Georgia, serif;
     --font-body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #11151d;
+      --surface: #171c26;
       --fg: #e7e9ef;
       --muted: #9aa2b3;
       --accent: #93abe6;
+      --accent-soft: #1c2436;
+      --on-accent: #11151d;
       --rule: #283041;
+      --ok: #6fd19d;
+      --ok-soft: #15281e;
+      --no: #f09a9a;
+      --no-soft: #2c1a1c;
+      --maybe: #e2c068;
+      --maybe-soft: #282213;
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"] {
     --bg: #11151d;
+    --surface: #171c26;
     --fg: #e7e9ef;
     --muted: #9aa2b3;
     --accent: #93abe6;
+    --accent-soft: #1c2436;
+    --on-accent: #11151d;
     --rule: #283041;
+    --ok: #6fd19d;
+    --ok-soft: #15281e;
+    --no: #f09a9a;
+    --no-soft: #2c1a1c;
+    --maybe: #e2c068;
+    --maybe-soft: #282213;
     color-scheme: dark;
   }
 
-  html, body { min-height: 100%; }
-  body { margin: 0; }
+  * { box-sizing: border-box; }
+  :root {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
   body {
+    margin: 0;
     background: var(--bg);
     color: var(--fg);
     font-family: var(--font-body);
@@ -49,29 +79,29 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: var(--bg);
+  }
 
   .wrap {
-    max-width: 56rem;
+    max-width: 52rem;
     margin: 0 auto;
-    padding-block: clamp(3rem, 10vw, 7rem) 3rem;
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
-    display: flex;
-    flex-direction: column;
-    gap: clamp(2.5rem, 6vw, 4rem);
-    min-height: 100vh;
-    box-sizing: border-box;
-  }
-  @supports (min-height: 100dvh) { .wrap { min-height: 100dvh; } }
-
-  header {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    padding-bottom: clamp(2rem, 5vw, 3rem);
-    border-bottom: 1px solid var(--rule);
   }
 
+  /* Header */
+  header.wrap {
+    padding-block: clamp(2.5rem, 8vw, 5rem) 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
   .eyebrow {
     margin: 0;
     font-size: 0.75rem;
@@ -80,52 +110,599 @@
     text-transform: uppercase;
     color: var(--accent);
   }
-
   h1 {
     margin: 0;
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(3rem, 11vw, 6.5rem);
+    font-size: clamp(2.75rem, 9vw, 5rem);
     line-height: 0.95;
     letter-spacing: -0.01em;
     text-wrap: balance;
   }
-  h1 em {
-    font-style: italic;
-    font-weight: 500;
-    color: var(--accent);
+  h1 em { font-style: italic; font-weight: 500; color: var(--accent); }
+  .topic {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    margin-top: 0.75rem;
   }
-  h1 .line { display: block; }
-
-  main { flex: 1; }
-
-  .empty {
+  .topic h2 {
     margin: 0;
     font-family: var(--font-display);
-    font-style: italic;
-    font-size: 1.375rem;
+    font-weight: 600;
+    font-size: clamp(1.625rem, 4.5vw, 2.125rem);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+  .topic p { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+
+  /* Sticky toolbar */
+  .bar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    background: var(--bg);
+    border-bottom: 1px solid var(--rule);
+  }
+  .bar .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    padding-block: 0.75rem;
+  }
+  .count {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .btn {
+    appearance: none;
+    border: 0;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font: 600 0.9375rem/1 var(--font-body);
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .btn:hover { filter: brightness(1.08); }
+  .btn:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .btn svg { width: 1rem; height: 1rem; transition: transform 0.2s ease; }
+  .btn[aria-pressed="true"] svg { transform: rotate(180deg); }
+
+  /* Questions */
+  main.wrap { padding-block: 0 3rem; }
+  .qs { display: flex; flex-direction: column; }
+  details.q { border-bottom: 1px solid var(--rule); }
+  details.q:last-child { border-bottom: 0; }
+  summary {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 2.75rem 1fr 1.5rem;
+    gap: 1rem;
+    align-items: start;
+    padding: 1.125rem 0.25rem;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  .num {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.625rem;
+    line-height: 1.1;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  .qt { display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
+  .title { font-weight: 500; font-size: 1.0625rem; line-height: 1.45; text-wrap: pretty; }
+  summary:hover .title { color: var(--accent); }
+  .kind {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .chev {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0.25rem;
+    color: var(--muted);
+    transition: transform 0.2s ease;
+  }
+  details[open] > summary .chev { transform: rotate(180deg); color: var(--accent); }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 0.25rem 1.75rem calc(2.75rem + 1rem + 0.25rem);
+    min-width: 0;
+  }
+  .prompt { margin: 0; max-width: 65ch; }
+
+  .opts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.375rem; }
+  .opt {
+    display: grid;
+    grid-template-columns: 1.75rem 1fr auto;
+    gap: 0.75rem;
+    align-items: start;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+  }
+  .opt .letter {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    border: 1px solid var(--rule);
+    display: grid;
+    place-items: center;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--surface);
+  }
+  .opt .txt { min-width: 0; padding-top: 0.125rem; }
+  .opt .tag {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-top: 0.375rem;
+    white-space: nowrap;
+  }
+  .opt.correct { background: var(--ok-soft); }
+  .opt.correct .letter { background: var(--ok); border-color: var(--ok); color: var(--bg); }
+  .opt.correct .txt { font-weight: 500; }
+  .opt.correct .tag { color: var(--ok); }
+  .opt.maybe { background: var(--maybe-soft); }
+  .opt.maybe .letter { border-color: var(--maybe); color: var(--maybe); }
+  .opt.maybe .tag { color: var(--maybe); }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+  th, td { text-align: left; vertical-align: top; padding: 0.625rem 0.875rem; border-bottom: 1px solid var(--rule); }
+  tr:last-child td { border-bottom: 0; }
+  th {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  td.ans { white-space: nowrap; width: 1%; }
+  td.match { font-weight: 500; min-width: 10rem; }
+  .pill {
+    display: inline-block;
+    padding: 0.125rem 0.625rem;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+  .pill.true { background: var(--ok-soft); color: var(--ok); }
+  .pill.false { background: var(--no-soft); color: var(--no); }
+  .pill.check { background: var(--maybe-soft); color: var(--maybe); }
+  td.pending { color: var(--muted); font-weight: 400; font-style: italic; }
+  td.pending .pill { font-style: normal; margin-bottom: 0.25rem; }
+
+  .answer {
+    background: var(--accent-soft);
+    border-radius: 10px;
+    padding: 0.875rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    max-width: 65ch;
+  }
+  .answer .label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .answer p { margin: 0; }
+  .answer ol { margin: 0; padding-left: 1.375rem; display: flex; flex-direction: column; gap: 0.25rem; }
+  .answer ol li::marker { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .key-title { margin: 0; }
+  .key td:first-child { width: 1%; white-space: nowrap; color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  footer.wrap {
+    padding-block: 1.5rem 2.5rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.8125rem;
     color: var(--muted);
   }
 
-  footer {
-    font-size: 0.8125rem;
-    color: var(--muted);
-    letter-spacing: 0.02em;
+  @media (max-width: 560px) {
+    summary { grid-template-columns: 2rem 1fr 1.25rem; gap: 0.75rem; }
+    .num { font-size: 1.375rem; }
+    .body { padding-left: 0.25rem; }
+    .opt { padding: 0.5rem; gap: 0.625rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chev, .btn svg { transition: none; }
   }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <p class="eyebrow">Study Guide</p>
-    <h1><span class="line">Dos Santos</span> <em class="line">Jesus</em></h1>
-  </header>
 
-  <main>
-    <p class="empty">This page is ready for your notes.</p>
-  </main>
+<header class="wrap">
+  <p class="eyebrow">Study Guide</p>
+  <h1>Dos Santos <em>Jesus</em></h1>
+  <div class="topic">
+    <h2>Measuring Instruments: Revision Questions</h2>
+    <p>22 questions in the same order as the assessment. Tap a question to see its answer.</p>
+  </div>
+</header>
 
-  <footer>Dos Santos Jesus Study Guide</footer>
+<div class="bar">
+  <div class="wrap">
+    <p class="count" id="count" aria-live="polite">0 of 22 open</p>
+    <button class="btn" id="toggle-all" type="button" aria-pressed="false">
+      <span id="toggle-label">Open all</span>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
 </div>
+
+<main class="wrap">
+  <div class="qs" id="qs"></div>
+  <noscript><p>Turn on JavaScript to see the questions.</p></noscript>
+</main>
+
+<footer class="wrap">Dos Santos Jesus Study Guide · Measuring Instruments</footer>
+
+<script>
+const QUESTIONS = [
+  { n: 1, type: "mc", title: "Meter connected across a component",
+    prompt: "In a powered 4.5 V circuit, an analogue meter's + terminal connects to the top (positive side) of R2, and its − terminal connects to the bottom of R2. Select the correct response.",
+    options: ["The meter is connected to measure current.", "The meter is connected to measure resistance.", "The meter is connected to measure voltage.", "The meter will be damaged as the leads are reversed."],
+    correct: ["c"],
+    answer: "c. The meter is connected to measure voltage. It's across R2 (in parallel), with the circuit powered.",
+    key: "c. Voltage." },
+
+  { n: 2, type: "tf", title: "Voltage testers: true or false",
+    rows: [
+      ["Non-contact voltage testers operate by detecting an electric field, making operation safer due to no contact required.", true],
+      ["Non-contact voltage testers will detect DC voltages only.", false],
+      ["LED, neon and solenoid testers require care to be taken during measurement due to being in contact with a live source.", true],
+      ["Voltage testers give an accurate voltage measurement.", false],
+      ["Voltage testers are used by technicians to indicate the presence of live circuits.", true],
+      ["Non-contact voltage testers require the tip to be placed in close proximity to the circuit being tested.", true]
+    ],
+    why: "Non-contact testers detect AC only. Voltage testers indicate that voltage is present; they don't measure it.",
+    key: "T, F, T, F, T, T." },
+
+  { n: 3, type: "mc", kind: "Select three", title: "Which of the following are safety requirement statements when using measuring devices? (Select three)",
+    options: ["Hold probe tips with bare hands while taking live measurements to improve accuracy.", "If you are confident in the workplace you do not need to review safety requirements.", "Open equipment should be considered live (energised) until isolation is proven.", "Wherever possible, switch off, unplug and discharge equipment under repair.", "Watches, rings and jewellery should be removed."],
+    correct: ["c", "d", "e"],
+    answer: "c, d, e.",
+    key: "c, d, e." },
+
+  { n: 4, type: "match", title: "Match the test equipment to the task it is used for",
+    prompt: "Test equipment: Volt Stick (LED or Lamp) · Digital / Analog Multimeter · Clamp Meter · Solenoid Tester · Insulation Resistance Tester · one more option from the quiz dropdown (to confirm)",
+    rows: [
+      ["Simple, easy to use, with contact required for testing for a live circuit", "The remaining dropdown option (not Volt Stick)", true],
+      ["Meter incorporating voltage, current and resistance measurement functions", "Digital / Analog Multimeter"],
+      ["Non-contact tester for testing for live (energised) terminals and tracing breaks along cables", "Volt Stick (LED or Lamp)"],
+      ["Non-contact, high current measurements", "Clamp Meter"],
+      ["Rugged voltage indicator (approx. 12 to 600 V) suited to noisy, poorly illuminated or very bright surroundings due to its vibration and sound function", "Solenoid Tester"],
+      ["Testing for current leakage caused by faulty or damaged insulation", "Insulation Resistance Tester"]
+    ],
+    why: "The quiz marked Volt Stick wrong on the contact row, so it goes on the non-contact row instead.",
+    key: "Matching. See question 4 (first row still to confirm)." },
+
+  { n: 5, type: "order", title: "What are the four steps that must occur before using a tester (multimeter / voltage indicator) to ensure serviceability? Put them in order.",
+    order: ["Physical inspection of the case and leads.", "Check the calibration date (if applicable).", "Conduct a continuity test (confirm conductor serviceability).", "Test the meter on a 'known voltage source' to confirm meter operation."],
+    key: "Inspect case and leads → check calibration date → continuity test → test on a known voltage source." },
+
+  { n: 6, type: "fill", title: "Complete the sentence",
+    prompt: "When measuring resistance with a multimeter, the probes should be connected in ______ (series / parallel) with the component, and the circuit should be ______ (energised / de-energised).",
+    answer: "Parallel; de-energised. Resistance is measured across the component with the power off, because the meter supplies its own test current.",
+    key: "Parallel; de-energised." },
+
+  { n: 7, type: "order", title: "Insulation resistance test: put the steps in order",
+    order: ["Isolate the circuit to be tested.", "Verify that the MEASURE key is not in the measure position.", "Determine and select the measurement voltage relevant to industry standards.", "Connect the black lead to the ground side to be measured.", "Connect the red lead to the line being measured.", "Complete the TEST process IAW manufacturer's instructions.", "Read and record the measurement."],
+    key: "Isolate → MEASURE key off → select voltage → black lead to ground → red lead to line → test → read and record." },
+
+  { n: 8, type: "mc", kind: "Select five", title: "When selecting a meter, which of the following should be considered? (Select five)",
+    options: ["Range/s", "Cost", "Manufacturer", "Type of measurement required", "Accuracy", "Internal resistance", "Analogue/Digital"],
+    correct: ["a", "d", "e", "f", "g"],
+    answer: "a, d, e, f, g. Cost and manufacturer are purchasing considerations, not technical ones.",
+    key: "a, d, e, f, g." },
+
+  { n: 9, type: "mc", title: "Bridge circuit",
+    prompt: "A bridge circuit has R1 = 200 Ω, R2 = 200 Ω, Rs = 1 kΩ and Rx unknown. For a balanced circuit, what is the resistance value of Rx?",
+    options: ["200 Ω", "Depends on the voltage", "1.2 kΩ", "1 kΩ"],
+    correct: ["d"],
+    answer: "d. 1 kΩ. With R1 = R2, the bridge balances when Rx equals Rs.",
+    key: "d. 1 kΩ." },
+
+  { n: 10, type: "mc", title: "Reading an analogue scale",
+    prompt: "An analogue multimeter has 0–250, 0–50 and 0–10 DCV scales. The switch is set to the 1 DCV position, and the needle sits at 8.8 on the 0–10 scale. What value is being displayed?",
+    options: ["0.45 Vdc", "0.88 Vdc", "21.2 Vdc", "8.8 Vdc"],
+    correct: ["b"],
+    answer: "b. 0.88 Vdc. On the 1 V range, read the 0–10 scale and divide by 10.",
+    key: "b. 0.88 Vdc." },
+
+  { n: 11, type: "tf", title: "Analogue vs digital multimeters: true or false",
+    rows: [
+      ["Analog multimeters require zeroing prior to resistance measurements.", true],
+      ["Digital multimeters have lower input impedance (resistance) than analog multimeters for voltage measurements.", false],
+      ["Range and polarity of the leads are critical for analog multimeters to avoid full scale deflection and meter damage.", true],
+      ["Digital multimeters are simpler to use than analog.", true],
+      ["Digital multimeters are subject to parallax error.", false],
+      ["Digital multimeters respond quicker than analog multimeters.", false],
+      ["Analog meters are auto-ranging.", false],
+      ["A voltmeter is an instrument used to measure voltages of either direct or alternating current, in volts.", true],
+      ["An ammeter is an instrument for measuring either direct or alternating current, in amperes.", true]
+    ],
+    why: "DMMs have higher input impedance (about 10 MΩ). Parallax only affects needle meters. Analogue meters respond faster to changing values. Auto-ranging is a digital feature.",
+    key: "T, F, T, T, F, F, F, T, T." },
+
+  { n: 12, type: "mc", title: "Which of the following is NOT a consequence of connecting an ammeter in parallel with a component?",
+    options: ["Meter loading effect", "Short circuit across the component", "Blowing the internal fuse of the meter", "Increase of measurement accuracy"],
+    correct: ["d"],
+    answer: "d. Increase of measurement accuracy. An ammeter in parallel shorts the component, can blow the meter's fuse and loads the circuit. Accuracy never improves.",
+    key: "d. Increase of measurement accuracy." },
+
+  { n: 13, type: "mc", title: "Meter loading",
+    prompt: "A 15 V supply feeds a closed switch S1, R1 (5 MΩ) and R2 (10 MΩ) in series. A multimeter with 10 MΩ internal resistance and ±2% accuracy is connected across R2. What voltage will the meter display?",
+    options: ["10.00 Vdc", "7.50 Vdc", "15.00 Vdc", "5.00 Vdc"],
+    correct: ["b"],
+    answer: "b. 7.50 Vdc (7.35–7.65 V with ±2%). The meter's 10 MΩ in parallel with R2's 10 MΩ gives 5 MΩ, so the 15 V splits evenly with R1. Without the meter, R2 would have 10 V.",
+    key: "b. 7.50 Vdc." },
+
+  { n: 14, type: "mc", kind: "True or false", letters: false, title: "True or false",
+    prompt: "For the measurement in question 13, the loading effect of the meter has affected the operation of the circuit.",
+    options: ["True", "False"],
+    correct: ["a"],
+    answer: "True. Connecting the meter dropped R2's voltage from 10 V to 7.5 V.",
+    key: "True." },
+
+  { n: 15, type: "mc", title: "Referring to meters, which of the following statements is correct?",
+    options: ["Ammeter internal resistance must be extremely low to reduce the loading effect on the circuit.", "Meter internal resistance does not affect circuit operation.", "Voltmeter internal resistance must be very low to reduce the loading effect on the circuit.", "Ammeter internal resistance must be high to reduce the loading effect on the circuit."],
+    correct: ["a"],
+    answer: "a. An ammeter (in series) needs very low resistance, and a voltmeter (in parallel) needs very high resistance.",
+    key: "a." },
+
+  { n: 16, type: "mc", title: "What is the function of the reflective strip behind the needle of an analogue meter?",
+    options: ["Makes small needle variations more visible to the operator.", "Assists the operator to view the needle at 90 degrees to reduce parallax error.", "Provides a lamp background function.", "Removes stray magnetic fields from affecting needle movement."],
+    correct: ["b"],
+    answer: "b. The strip is a mirror. When the needle hides its own reflection, your eye is square to the scale.",
+    key: "b." },
+
+  { n: 17, type: "mc", title: "Reading a negative value",
+    prompt: "A digital multimeter is connected across R2 in a 4.5 V circuit. The black (COM) lead is on the top (positive) side of R2, and the red lead is on the bottom (negative) side. The display reads -3.24. Select the correct statement.",
+    options: ["The multimeter is connected correctly and is measuring DC voltage.", "The multimeter probes are connected reversed.", "The multimeter is connected correctly and is measuring current.", "The multimeter is connected correctly and is measuring resistance."],
+    correct: ["b"],
+    answer: "b. The probes are connected reversed. COM on the positive side gives a negative reading.",
+    key: "b. The probes are connected reversed." },
+
+  { n: 18, type: "mc", title: "When an analogue needle moves to its furthest point, what is this known as?",
+    options: ["Full scale movement", "Maximum deflection", "Full scale deflection", "Partial deflection"],
+    correct: ["c"],
+    answer: "c. Full scale deflection (FSD).",
+    key: "c. Full scale deflection (FSD)." },
+
+  { n: 19, type: "mc", title: "Meter wired into the circuit",
+    prompt: "An analogue meter is wired into a break in the circuit, between switch S1 and R1. Its + terminal goes towards the battery positive, and its − terminal goes towards R1. Select the correct response.",
+    options: ["The meter is connected to measure voltage.", "The meter is connected to measure current.", "The meter is connected to measure resistance.", "The meter will be damaged as the leads are reversed."],
+    correct: ["b"],
+    answer: "b. The meter is connected to measure current. It's in series, in a break in the circuit, with correct polarity.",
+    key: "b. Current." },
+
+  { n: 20, type: "mc", title: "What does the purpose of a calibration on measurement equipment ensure?",
+    options: ["Accuracy of measurements", "Meter serviceability", "Use by date has not expired", "All of the above"],
+    correct: ["a"],
+    answer: "a. Accuracy of measurements.",
+    key: "a. Accuracy of measurements." },
+
+  { n: 21, type: "mc", kind: "Select three", title: "What hazards or issues may be evident if measuring devices are used incorrectly? (Select three)",
+    options: ["Electric shock", "The device doesn't work, no hazards occur", "Inaccurate / false measurements", "Damage to analog tester due to incorrect polarity and range", "Elimination of the need to use PPE"],
+    correct: ["a", "c", "d"],
+    answer: "a, c, d.",
+    key: "a, c, d." },
+
+  { n: 22, type: "mc", kind: "Select three", title: "Which of the following describe effects of electrical current and relevant industry principles for protection against current damage and metal corrosion? (Select three)",
+    options: ["Industry standards allow unrestricted current flow as long as personal protective equipment (PPE) is worn.", "Electrical current can accelerate corrosion in metals through electrochemical reactions, particularly in the presence of moisture, leading to material degradation and failure, addressed by use of sacrificial anodes and protective coatings. Electrical current prevents corrosion by strengthening metallic bonds once installed in a circuit.", "Excessive current can cause overheating of conductors and components, leading to insulation failure, fire risk and equipment damage, addressed through protective devices such as fuses and circuit breakers.", "Electrical current flowing through the human body can cause effects ranging from muscle contraction to fatal injury, which is why industry standards specify limits on safe touch voltages and currents."],
+    correct: ["c", "d"],
+    maybe: ["b"],
+    answer: "c, d and one more. b looks right until its last sentence, which is false: current doesn't prevent corrosion. If the question has no option e, b is the third pick.",
+    key: "c, d and one more (b if there is no option e)." }
+];
+
+const KIND = { mc: "Multiple choice", tf: "True or false", order: "Put in order", match: "Matching", fill: "Fill in the blanks" };
+const LETTERS = "abcdefghij";
+
+function el(tag, cls, text) {
+  const node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (text != null) node.textContent = text;
+  return node;
+}
+
+function chevron() {
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", "0 0 20 20");
+  svg.setAttribute("fill", "none");
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("class", "chev");
+  const path = document.createElementNS(ns, "path");
+  path.setAttribute("d", "M5 7.5l5 5 5-5");
+  path.setAttribute("stroke", "currentColor");
+  path.setAttribute("stroke-width", "2");
+  path.setAttribute("stroke-linecap", "round");
+  path.setAttribute("stroke-linejoin", "round");
+  svg.appendChild(path);
+  return svg;
+}
+
+function answerBox(label, text) {
+  const box = el("div", "answer");
+  box.appendChild(el("span", "label", label));
+  if (text) box.appendChild(el("p", null, text));
+  return box;
+}
+
+function tableOf(headers, rows) {
+  const wrap = el("div", "table-wrap");
+  const table = el("table");
+  const thead = el("thead");
+  const hr = el("tr");
+  headers.forEach(h => hr.appendChild(el("th", null, h)));
+  thead.appendChild(hr);
+  const tbody = el("tbody");
+  rows.forEach(r => tbody.appendChild(r));
+  table.append(thead, tbody);
+  wrap.appendChild(table);
+  return wrap;
+}
+
+function renderQuestion(q) {
+  const d = el("details", "q");
+  d.id = "q" + q.n;
+
+  const s = el("summary");
+  s.appendChild(el("span", "num", String(q.n)));
+  const qt = el("span", "qt");
+  qt.appendChild(el("span", "title", q.title));
+  qt.appendChild(el("span", "kind", q.kind || KIND[q.type]));
+  s.appendChild(qt);
+  s.appendChild(chevron());
+  d.appendChild(s);
+
+  const body = el("div", "body");
+  if (q.prompt) body.appendChild(el("p", "prompt", q.prompt));
+
+  if (q.type === "mc") {
+    const list = el("ul", "opts");
+    q.options.forEach((text, i) => {
+      const letter = LETTERS[i];
+      const li = el("li", "opt");
+      const isCorrect = q.correct.includes(letter);
+      const isMaybe = (q.maybe || []).includes(letter);
+      if (isCorrect) li.classList.add("correct");
+      if (isMaybe) li.classList.add("maybe");
+      li.appendChild(el("span", "letter", q.letters === false ? (text[0]) : letter));
+      li.appendChild(el("span", "txt", text));
+      li.appendChild(el("span", "tag", isCorrect ? "Correct" : isMaybe ? "Likely 3rd" : ""));
+      list.appendChild(li);
+    });
+    body.appendChild(list);
+    body.appendChild(answerBox("Answer", q.answer));
+  }
+
+  if (q.type === "tf") {
+    const rows = q.rows.map(([stmt, val]) => {
+      const tr = el("tr");
+      tr.appendChild(el("td", null, stmt));
+      const td = el("td", "ans");
+      td.appendChild(el("span", "pill " + (val ? "true" : "false"), val ? "True" : "False"));
+      tr.appendChild(td);
+      return tr;
+    });
+    body.appendChild(tableOf(["Statement", "Answer"], rows));
+    body.appendChild(answerBox("Why", q.why));
+  }
+
+  if (q.type === "match") {
+    const rows = q.rows.map(([task, tool, pending]) => {
+      const tr = el("tr");
+      tr.appendChild(el("td", null, task));
+      const td = el("td", "match" + (pending ? " pending" : ""));
+      if (pending) {
+        td.appendChild(el("span", "pill check", "To confirm"));
+        td.appendChild(document.createElement("br"));
+      }
+      td.appendChild(document.createTextNode(tool));
+      tr.appendChild(td);
+      return tr;
+    });
+    body.appendChild(tableOf(["Task", "Test equipment"], rows));
+    body.appendChild(answerBox("Why", q.why));
+  }
+
+  if (q.type === "order") {
+    const box = answerBox("Correct order");
+    const ol = el("ol");
+    q.order.forEach(step => ol.appendChild(el("li", null, step)));
+    box.appendChild(ol);
+    body.appendChild(box);
+  }
+
+  if (q.type === "fill") {
+    body.appendChild(answerBox("Answer", q.answer));
+  }
+
+  d.appendChild(body);
+  return d;
+}
+
+function renderKey() {
+  const d = el("details", "q key");
+  d.id = "answer-key";
+  const s = el("summary");
+  s.appendChild(el("span", "num", "✓"));
+  const qt = el("span", "qt");
+  qt.appendChild(el("span", "title", "Quick answer key"));
+  qt.appendChild(el("span", "kind", "All 22 answers on one screen"));
+  s.appendChild(qt);
+  s.appendChild(chevron());
+  d.appendChild(s);
+
+  const body = el("div", "body");
+  const rows = QUESTIONS.map(q => {
+    const tr = el("tr");
+    tr.appendChild(el("td", null, String(q.n)));
+    tr.appendChild(el("td", null, q.key));
+    return tr;
+  });
+  body.appendChild(tableOf(["Q", "Answer"], rows));
+  d.appendChild(body);
+  return d;
+}
+
+const list = document.getElementById("qs");
+QUESTIONS.forEach(q => list.appendChild(renderQuestion(q)));
+list.appendChild(renderKey());
+
+const allDetails = Array.from(list.querySelectorAll("details"));
+const questionDetails = allDetails.filter(d => !d.classList.contains("key"));
+const btn = document.getElementById("toggle-all");
+const btnLabel = document.getElementById("toggle-label");
+const count = document.getElementById("count");
+
+function refresh() {
+  const open = questionDetails.filter(d => d.open).length;
+  count.textContent = open + " of " + questionDetails.length + " open";
+  const allOpen = open === questionDetails.length;
+  btnLabel.textContent = allOpen ? "Close all" : "Open all";
+  btn.setAttribute("aria-pressed", String(allOpen));
+}
+
+btn.addEventListener("click", () => {
+  const openAll = questionDetails.some(d => !d.open);
+  questionDetails.forEach(d => { d.open = openAll; });
+  refresh();
+});
+allDetails.forEach(d => d.addEventListener("toggle", refresh));
+refresh();
+</script>
 </body>
 </html>
