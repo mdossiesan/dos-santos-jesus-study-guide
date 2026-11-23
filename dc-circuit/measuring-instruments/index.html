@@ -331,7 +331,8 @@
       <p class="score" id="score" aria-live="polite"><strong>0 right</strong> · 0 of 22 done</p>
     </div>
     <div class="bar-actions">
-      <button class="btn ghost" id="reset-all" type="button">Reset quiz</button>
+      <button class="btn ghost" id="show-all" type="button">Show all answers</button>
+      <button class="btn ghost" id="reset-all" type="button">Reset</button>
       <button class="btn" id="toggle-all" type="button" aria-pressed="false">
         <span id="toggle-label">Open all</span>
         <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -522,6 +523,7 @@ const LETTERS = "abcdefghij";
 const WORDS = { 2: "two", 3: "three", 4: "four", 5: "five" };
 const state = new Map();
 const resets = [];
+const reveals = [];
 
 function el(tag, cls, text) {
   const node = document.createElement(tag);
@@ -975,6 +977,7 @@ function renderQuestion(q) {
   }
   retryBtn.addEventListener("click", reset);
   resets.push(reset);
+  reveals.push(() => { if (!api.locked) finish("shown"); });
   api.changed();
   return d;
 }
@@ -1007,6 +1010,8 @@ function renderKey() {
 const scoreEl = document.getElementById("score");
 function updateScore() {
   const done = state.size;
+  const showAll = document.getElementById("show-all");
+  if (showAll) showAll.disabled = done === QUESTIONS.length;
   const right = [...state.values()].filter(v => v === "right").length;
   scoreEl.innerHTML = "";
   scoreEl.append(el("strong", null, `${right} right`), document.createTextNode(` · ${done} of ${QUESTIONS.length} done`));
@@ -1069,18 +1074,19 @@ toggleBtn.addEventListener("click", () => {
 });
 questionDetails.forEach(d => d.addEventListener("toggle", refreshToggle));
 
-const resetBtn = document.getElementById("reset-all");
-let armed = null;
-resetBtn.addEventListener("click", () => {
-  if (!armed) {
-    resetBtn.textContent = "Tap again to reset";
-    armed = setTimeout(() => { armed = null; resetBtn.textContent = "Reset quiz"; }, 3000);
-    return;
-  }
-  clearTimeout(armed);
-  armed = null;
-  resetBtn.textContent = "Reset quiz";
+/* Reset: one click clears every answer and the score, closes the questions and goes back to the top */
+document.getElementById("reset-all").addEventListener("click", () => {
   resets.forEach(r => r());
+  questionDetails.forEach(d => setOpen(d, false));
+  refreshToggle();
+  window.scrollTo({ top: 0, behavior: REDUCE ? "auto" : "smooth" });
+});
+
+/* Show all answers: reveals the answer to every question not yet answered, and opens them all */
+document.getElementById("show-all").addEventListener("click", () => {
+  reveals.forEach(f => f());
+  questionDetails.forEach(d => setOpen(d, true));
+  refreshToggle();
 });
 
 refreshToggle();
