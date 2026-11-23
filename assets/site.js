@@ -10,6 +10,12 @@
           title: "DC Study Guide",
           meta: "Revision quiz · 22 questions",
           href: "dc-circuit/measuring-instruments/"
+        },
+        {
+          id: "dc-quiz",
+          title: "DC Quiz",
+          meta: "One question at a time · random order",
+          href: "dc-circuit/measuring-instruments/quiz/"
         }
       ]
     }
