@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Study Notes</title>
+<meta name="description" content="Personal study notes. Dos Santos Jesus Study Guide.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+  /* Notes: a list of notes beside a plain writing sheet. On phones the list and the sheet take turns. */
+  .wrap.wide { max-width: 64rem; }
+  .warn {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    background: var(--no-soft);
+    color: var(--no);
+    font-size: 0.875rem;
+    font-weight: 500;
+    max-width: 62ch;
+  }
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    padding-bottom: 1.25rem;
+  }
+  .toolbar .btn svg { width: 1rem; height: 1rem; }
+  .toolbar-msg { font-size: 0.875rem; color: var(--muted); }
+  .toolbar-msg.bad { color: var(--no); }
+
+  .notes {
+    display: grid;
+    grid-template-columns: minmax(15rem, 19rem) minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+    padding-bottom: 4rem;
+  }
+  .list-pane { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+  .note-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.375rem; }
+  .note-item {
+    appearance: none;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem 0.875rem;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    background: var(--surface);
+    cursor: pointer;
+  }
+  .note-item:hover { border-color: var(--accent); }
+  .note-item[aria-current="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .note-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .note-item .t { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .note-item .s { font-size: 0.875rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .note-item .d {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .chip {
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.0625rem 0.5rem;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .note-item[aria-current="true"] .chip { background: var(--surface); }
+  .empty {
+    margin: 0;
+    padding: 1.25rem;
+    border: 1px dashed var(--rule);
+    border-radius: 12px;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .editor {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    background: var(--surface);
+    min-width: 0;
+  }
+  .editor-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; }
+  .back {
+    appearance: none;
+    border: 0;
+    background: none;
+    padding: 0.25rem 0;
+    color: var(--accent);
+    font: 600 0.875rem/1 var(--font-body);
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    gap: 0.375rem;
+  }
+  .back svg { width: 1rem; height: 1rem; }
+  .back:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+  .topic-field { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--muted); }
+  .topic-field select {
+    font: inherit;
+    font-size: 0.875rem;
+    color: var(--fg);
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 0.375rem 0.5rem;
+  }
+  .save-status { font-size: 0.8125rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .save-status.ok { color: var(--ok); }
+  .title-input {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid var(--rule);
+    padding: 0.25rem 0 0.5rem;
+    background: transparent;
+    color: var(--fg);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 5vw, 2.25rem);
+    line-height: 1.15;
+  }
+  .title-input::placeholder, .body-input::placeholder { color: var(--muted); opacity: 0.7; }
+  .body-input {
+    width: 100%;
+    min-height: 50vh;
+    resize: vertical;
+    border: 0;
+    padding: 0.25rem 0;
+    background: transparent;
+    color: var(--fg);
+    font: 400 1rem/1.7 var(--font-body);
+  }
+  .title-input:focus-visible, .body-input:focus-visible, .topic-field select:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+  .editor-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+  .btn.danger { color: var(--no); }
+  .btn.danger.armed { background: var(--no); color: var(--bg); box-shadow: none; }
+  .editor-placeholder {
+    display: grid;
+    place-items: center;
+    min-height: 20rem;
+    padding: 2rem;
+    border: 1px dashed var(--rule);
+    border-radius: 16px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  @media (max-width: 760px) {
+    .notes { grid-template-columns: 1fr; }
+    .notes.editing .list-pane { display: none; }
+    .notes:not(.editing) .editor,
+    .notes:not(.editing) .editor-placeholder { display: none; }
+    .back { display: inline-flex; }
+    .body-input { min-height: 55vh; }
+  }
+</style>
+</head>
+<body data-page="notes">
+
+<header class="topbar">
+  <div class="wrap wide">
+    <button class="menu-btn" type="button" data-menu-open aria-controls="site-menu" aria-expanded="false" aria-label="Open menu">
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 5.5h14M3 10h14M3 14.5h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="wrap wide page-head">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="../">Home</a><span aria-hidden="true">/</span><span>My Notes</span></nav>
+    <h1>My Notes</h1>
+    <p class="lede">Notes save automatically in this browser, on this device. Nobody else can see them. Use Download backup to keep a copy or move your notes to another device.</p>
+    <p class="warn" id="storage-warn" hidden>This browser is blocking saving, so your notes will disappear when you close the page. Download a backup before you leave.</p>
+  </div>
+
+  <div class="wrap wide">
+    <div class="toolbar">
+      <button class="btn" id="new-note" type="button">
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        New note
+      </button>
+      <button class="btn ghost" id="export" type="button">Download backup</button>
+      <button class="btn ghost" id="import" type="button">Restore backup</button>
+      <input type="file" id="import-file" accept=".json,application/json" hidden>
+      <span class="toolbar-msg" id="toolbar-msg" aria-live="polite"></span>
+    </div>
+
+    <div class="notes" id="notes">
+      <div class="list-pane">
+        <ul class="note-list" id="note-list" aria-label="Your notes"></ul>
+        <p class="empty" id="empty">No notes yet. Tap New note to write your first one.</p>
+      </div>
+
+      <section class="editor" id="editor" aria-label="Note" hidden>
+        <div class="editor-top">
+          <button class="back" id="back" type="button">
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16 10H4M9 5l-5 5 5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            All notes
+          </button>
+          <label class="topic-field" for="note-topic">Topic <select id="note-topic"></select></label>
+          <span class="save-status" id="save-status" aria-live="polite"></span>
+        </div>
+        <input class="title-input" id="note-title" type="text" placeholder="Title" autocomplete="off" aria-label="Note title">
+        <textarea class="body-input" id="note-body" placeholder="Start writing…" aria-label="Note text"></textarea>
+        <div class="editor-foot">
+          <span id="note-dates"></span>
+          <button class="btn ghost small danger" id="delete" type="button">Delete note</button>
+        </div>
+      </section>
+      <div class="editor-placeholder" id="editor-placeholder">Pick a note from the list, or start a new one.</div>
+    </div>
+  </div>
+</main>
+
+<script src="../assets/site.js" data-root="../"></script>
+<script>
+(function () {
+  var KEY = "dsj-study-notes-v1";
+  var TOPICS = ["General"].concat(window.SITE.NAV.map(function (g) { return g.group; }));
+
+  var $ = function (id) { return document.getElementById(id); };
+  var listEl = $("note-list"), emptyEl = $("empty"), notesEl = $("notes");
+  var editor = $("editor"), placeholder = $("editor-placeholder");
+  var titleEl = $("note-title"), bodyEl = $("note-body"), topicEl = $("note-topic");
+  var statusEl = $("save-status"), datesEl = $("note-dates"), delBtn = $("delete");
+  var msgEl = $("toolbar-msg");
+
+  TOPICS.forEach(function (t) {
+    var o = document.createElement("option");
+    o.value = t;
+    o.textContent = t;
+    topicEl.appendChild(o);
+  });
+
+  var canSave = true;
+  try {
+    localStorage.setItem("__dsj_test", "1");
+    localStorage.removeItem("__dsj_test");
+  } catch (e) { canSave = false; }
+  if (!canSave) $("storage-warn").hidden = false;
+
+  function load() {
+    if (!canSave) return [];
+    try {
+      var data = JSON.parse(localStorage.getItem(KEY) || "[]");
+      return Array.isArray(data) ? data.filter(valid) : [];
+    } catch (e) { return []; }
+  }
+  function valid(n) {
+    return n && typeof n.id === "string" && typeof n.body === "string";
+  }
+  function persist() {
+    if (!canSave) return false;
+    try {
+      localStorage.setItem(KEY, JSON.stringify(notes));
+      return true;
+    } catch (e) {
+      showMsg("Couldn't save. Your browser storage may be full. Download a backup.", true);
+      return false;
+    }
+  }
+
+  var notes = load();
+  var currentId = null;
+  var saveTimer = null;
+
+  function newId() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  }
+  function sorted() {
+    return notes.slice().sort(function (a, b) { return b.updated - a.updated; });
+  }
+  function find(id) {
+    for (var i = 0; i < notes.length; i++) if (notes[i].id === id) return notes[i];
+    return null;
+  }
+  function fmtDate(ts) {
+    var d = new Date(ts);
+    var today = new Date();
+    if (d.toDateString() === today.toDateString()) {
+      return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+    }
+    return d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: d.getFullYear() === today.getFullYear() ? undefined : "numeric" });
+  }
+  function fmtFull(ts) {
+    return new Date(ts).toLocaleString(undefined, { day: "numeric", month: "short", year: "numeric", hour: "numeric", minute: "2-digit" });
+  }
+  function snippet(body) {
+    var line = body.split("\n").map(function (l) { return l.trim(); }).filter(Boolean)[0];
+    return line || "No text yet";
+  }
+
+  function renderList() {
+    listEl.innerHTML = "";
+    var list = sorted();
+    emptyEl.hidden = list.length > 0;
+    list.forEach(function (n) {
+      var li = document.createElement("li");
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "note-item";
+      if (n.id === currentId) b.setAttribute("aria-current", "true");
+      var t = document.createElement("span"); t.className = "t"; t.textContent = n.title.trim() || "Untitled note";
+      var s = document.createElement("span"); s.className = "s"; s.textContent = snippet(n.body);
+      var d = document.createElement("span"); d.className = "d";
+      var chip = document.createElement("span"); chip.className = "chip"; chip.textContent = n.topic || "General";
+      d.append(chip, document.createTextNode(fmtDate(n.updated)));
+      b.append(t, s, d);
+      b.addEventListener("click", function () { open(n.id, true); });
+      li.appendChild(b);
+      listEl.appendChild(li);
+    });
+  }
+
+  function open(id, enterEditing) {
+    flush();
+    currentId = id;
+    var n = find(id);
+    disarmDelete();
+    if (!n) {
+      editor.hidden = true;
+      placeholder.hidden = false;
+      notesEl.classList.remove("editing");
+      renderList();
+      return;
+    }
+    editor.hidden = false;
+    placeholder.hidden = true;
+    titleEl.value = n.title;
+    bodyEl.value = n.body;
+    topicEl.value = TOPICS.indexOf(n.topic) >= 0 ? n.topic : "General";
+    statusEl.textContent = "";
+    statusEl.className = "save-status";
+    datesEl.textContent = "Last edited " + fmtFull(n.updated);
+    if (enterEditing) notesEl.classList.add("editing");
+    renderList();
+  }
+
+  function scheduleSave() {
+    var n = find(currentId);
+    if (!n) return;
+    n.title = titleEl.value;
+    n.body = bodyEl.value;
+    n.topic = topicEl.value;
+    n.updated = Date.now();
+    statusEl.textContent = "Saving…";
+    statusEl.className = "save-status";
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(flush, 400);
+  }
+  function flush() {
+    if (!saveTimer) return;
+    clearTimeout(saveTimer);
+    saveTimer = null;
+    var ok = persist();
+    var n = find(currentId);
+    statusEl.textContent = ok ? "Saved" : (canSave ? "Not saved" : "Not saved on this browser");
+    statusEl.className = "save-status" + (ok ? " ok" : "");
+    if (n) datesEl.textContent = "Last edited " + fmtFull(n.updated);
+    renderList();
+  }
+
+  titleEl.addEventListener("input", scheduleSave);
+  bodyEl.addEventListener("input", scheduleSave);
+  topicEl.addEventListener("change", scheduleSave);
+  window.addEventListener("pagehide", flush);
+  document.addEventListener("visibilitychange", function () { if (document.hidden) flush(); });
+
+  $("new-note").addEventListener("click", function () {
+    flush();
+    var now = Date.now();
+    var n = { id: newId(), title: "", body: "", topic: "General", created: now, updated: now };
+    notes.push(n);
+    persist();
+    open(n.id, true);
+    titleEl.focus();
+  });
+
+  $("back").addEventListener("click", function () {
+    flush();
+    notesEl.classList.remove("editing");
+    window.scrollTo(0, 0);
+  });
+
+  var armed = null;
+  function disarmDelete() {
+    clearTimeout(armed);
+    armed = null;
+    delBtn.textContent = "Delete note";
+    delBtn.classList.remove("armed");
+  }
+  delBtn.addEventListener("click", function () {
+    if (!armed) {
+      delBtn.textContent = "Tap again to delete";
+      delBtn.classList.add("armed");
+      armed = setTimeout(disarmDelete, 3000);
+      return;
+    }
+    disarmDelete();
+    clearTimeout(saveTimer);
+    saveTimer = null;
+    notes = notes.filter(function (n) { return n.id !== currentId; });
+    persist();
+    var next = sorted()[0];
+    notesEl.classList.remove("editing");
+    open(next ? next.id : null, false);
+    showMsg("Note deleted.");
+  });
+
+  function showMsg(text, bad) {
+    msgEl.textContent = text;
+    msgEl.className = "toolbar-msg" + (bad ? " bad" : "");
+    clearTimeout(showMsg.t);
+    showMsg.t = setTimeout(function () { msgEl.textContent = ""; }, 5000);
+  }
+
+  $("export").addEventListener("click", function () {
+    flush();
+    if (!notes.length) { showMsg("There are no notes to back up yet."); return; }
+    var data = { app: "dos-santos-jesus-study-notes", version: 1, exported: new Date().toISOString(), notes: notes };
+    var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "study-notes-" + new Date().toISOString().slice(0, 10) + ".json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+    showMsg("Backup downloaded (" + notes.length + (notes.length === 1 ? " note)." : " notes)."));
+  });
+
+  var fileEl = $("import-file");
+  $("import").addEventListener("click", function () { fileEl.click(); });
+  fileEl.addEventListener("change", function () {
+    var file = fileEl.files && fileEl.files[0];
+    fileEl.value = "";
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      var incoming;
+      try {
+        var data = JSON.parse(reader.result);
+        incoming = Array.isArray(data) ? data : data && data.notes;
+        if (!Array.isArray(incoming)) throw new Error("bad");
+        incoming = incoming.filter(valid);
+      } catch (e) {
+        showMsg("That file isn't a notes backup. Choose a file made with Download backup.", true);
+        return;
+      }
+      var added = 0, updated = 0;
+      incoming.forEach(function (n) {
+        var clean = {
+          id: n.id,
+          title: typeof n.title === "string" ? n.title : "",
+          body: n.body,
+          topic: typeof n.topic === "string" ? n.topic : "General",
+          created: Number(n.created) || Date.now(),
+          updated: Number(n.updated) || Date.now()
+        };
+        var existing = find(clean.id);
+        if (!existing) { notes.push(clean); added++; }
+        else if (clean.updated > existing.updated) { Object.assign(existing, clean); updated++; }
+      });
+      persist();
+      var first = sorted()[0];
+      open(currentId && find(currentId) ? currentId : (first ? first.id : null), false);
+      showMsg("Restored " + added + (added === 1 ? " new note" : " new notes") + (updated ? " and updated " + updated : "") + ".");
+    };
+    reader.readAsText(file);
+  });
+
+  var first = sorted()[0];
+  open(first ? first.id : null, false);
+})();
+</script>
+</body>
+</html>
