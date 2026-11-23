@@ -7,7 +7,7 @@
       items: [
         {
           id: "measuring-instruments",
-          title: "Measuring Instruments",
+          title: "DC Assessment 2",
           meta: "Revision quiz · 22 questions",
           href: "dc-circuit/measuring-instruments/"
         }
