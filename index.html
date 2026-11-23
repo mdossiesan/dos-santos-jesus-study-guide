@@ -4,1154 +4,134 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dos Santos Jesus Study Guide</title>
-<meta name="description" content="Dos Santos Jesus Study Guide: Measuring Instruments revision quiz with answers.">
+<meta name="description" content="Dos Santos Jesus Study Guide.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
 <style>
-  /* Layout: one quiet column. Title up top, a sticky bar with score and Open all, then each question drops down into a quiz card with its answer at the bottom. */
-  :root {
-    --bg: #f6f7f9;
-    --surface: #ffffff;
-    --fg: #1a2130;
-    --muted: #5f6878;
-    --accent: #34529c;
-    --accent-soft: #e8edf7;
-    --on-accent: #ffffff;
-    --rule: #d9dde5;
-    --ok: #1f7a4d;
-    --ok-soft: #e2f2e9;
-    --no: #a63d3d;
-    --no-soft: #f7e6e6;
-    --font-display: "Cormorant Garamond", "Garamond", "Iowan Old Style", Georgia, serif;
-    --font-body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #11151d;
-      --surface: #171c26;
-      --fg: #e7e9ef;
-      --muted: #9aa2b3;
-      --accent: #93abe6;
-      --accent-soft: #1c2436;
-      --on-accent: #11151d;
-      --rule: #283041;
-      --ok: #6fd19d;
-      --ok-soft: #15281e;
-      --no: #f09a9a;
-      --no-soft: #2c1a1c;
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #11151d;
-    --surface: #171c26;
-    --fg: #e7e9ef;
-    --muted: #9aa2b3;
-    --accent: #93abe6;
-    --accent-soft: #1c2436;
-    --on-accent: #11151d;
-    --rule: #283041;
-    --ok: #6fd19d;
-    --ok-soft: #15281e;
-    --no: #f09a9a;
-    --no-soft: #2c1a1c;
-    color-scheme: dark;
-  }
+  /* Home: an open page on faint graph paper. The name is the only statement, underlined by a resistor trace. */
+  .topbar .wrap { padding-block: 1rem; display: flex; align-items: center; }
 
-  * { box-sizing: border-box; }
-  :root {
-    padding-top: env(safe-area-inset-top, 0px);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--fg);
-    font-family: var(--font-body);
-    font-size: 1rem;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0 0 auto;
-    height: env(safe-area-inset-top, 0px);
-    z-index: 10;
-    background: var(--bg);
-  }
-  [hidden] { display: none !important; }
-
-  .wrap {
-    max-width: 52rem;
-    margin: 0 auto;
-    padding-left: max(16px, env(safe-area-inset-left, 0px));
-    padding-right: max(16px, env(safe-area-inset-right, 0px));
-  }
-
-  /* Header */
-  header.wrap {
-    padding-block: clamp(2.5rem, 8vw, 5rem) 2rem;
+  .home {
+    position: relative;
+    min-height: calc(100vh - 4.75rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  .eyebrow {
-    margin: 0;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-  h1 {
-    margin: 0;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(2.75rem, 9vw, 5rem);
-    line-height: 0.95;
-    letter-spacing: -0.01em;
-    text-wrap: balance;
-  }
-  h1 em { font-style: italic; font-weight: 500; color: var(--accent); }
-  .topic {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--rule);
-    margin-top: 0.75rem;
-  }
-  .topic h2 {
-    margin: 0;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(1.625rem, 4.5vw, 2.125rem);
-    line-height: 1.15;
-    text-wrap: balance;
-  }
-  .topic p { margin: 0; color: var(--muted); font-size: 0.9375rem; max-width: 65ch; }
-
-  /* Sticky toolbar */
-  .bar {
-    position: sticky;
-    top: env(safe-area-inset-top, 0px);
-    z-index: 5;
-    background: var(--bg);
-    border-bottom: 1px solid var(--rule);
-  }
-  .bar .wrap {
-    display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 0.625rem 1rem;
-    padding-block: 0.75rem;
-  }
-  .score {
-    margin: 0;
-    font-size: 0.875rem;
-    color: var(--muted);
-    font-variant-numeric: tabular-nums;
-  }
-  .score strong { color: var(--fg); font-weight: 600; }
-  .bar-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-
-  .btn {
-    appearance: none;
-    border: 0;
-    border-radius: 999px;
-    background: var(--accent);
-    color: var(--on-accent);
-    font: 600 0.9375rem/1 var(--font-body);
-    padding: 0.75rem 1.25rem;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .btn:hover { filter: brightness(1.08); }
-  .btn.small { padding: 0.625rem 1rem; font-size: 0.875rem; }
-  .btn.ghost {
-    background: transparent;
-    color: var(--accent);
-    box-shadow: inset 0 0 0 1px var(--rule);
-  }
-  .btn.ghost:hover { background: var(--accent-soft); filter: none; }
-  .btn:disabled { opacity: 0.45; cursor: not-allowed; filter: none; }
-  .btn:focus-visible, summary:focus-visible, .opt:focus-visible, .seg button:focus-visible, select:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-  .btn svg { width: 1rem; height: 1rem; transition: transform 0.2s ease; }
-  .btn[aria-pressed="true"] svg { transform: rotate(180deg); }
-
-  /* Questions */
-  main.wrap { padding-block: 0 3rem; }
-  .qs { display: flex; flex-direction: column; }
-  details.q { border-bottom: 1px solid var(--rule); }
-  details.q:last-child { border-bottom: 0; }
-  summary {
-    list-style: none;
-    display: grid;
-    grid-template-columns: 2.75rem 1fr 1.5rem;
-    gap: 1rem;
-    align-items: start;
-    padding: 1.125rem 0.25rem;
-    cursor: pointer;
-    border-radius: 6px;
-  }
-  summary::-webkit-details-marker { display: none; }
-  .num {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.625rem;
-    line-height: 1.1;
-    color: var(--accent);
-    font-variant-numeric: tabular-nums lining-nums;
-  }
-  .qt { display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
-  .title { font-weight: 500; font-size: 1.0625rem; line-height: 1.45; text-wrap: pretty; }
-  summary:hover .title { color: var(--accent); }
-  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
-  .kind {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .status {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 0.0625rem 0.5rem;
-    border-radius: 999px;
-  }
-  .status.right { background: var(--ok-soft); color: var(--ok); }
-  .status.wrong { background: var(--no-soft); color: var(--no); }
-  .status.shown { background: var(--accent-soft); color: var(--muted); }
-  .chev {
-    width: 1.25rem;
-    height: 1.25rem;
-    margin-top: 0.25rem;
-    color: var(--muted);
-    transition: transform 0.2s ease;
-  }
-  details[open] > summary .chev { transform: rotate(180deg); color: var(--accent); }
-
-  .body {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 0 0.25rem 1.75rem calc(2.75rem + 1rem + 0.25rem);
-    min-width: 0;
-  }
-  .prompt { margin: 0; max-width: 65ch; }
-  .hint { margin: 0; font-size: 0.875rem; color: var(--muted); }
-
-  /* Choice rows (multiple choice and ordering) */
-  .opts { display: flex; flex-direction: column; gap: 0.375rem; }
-  .opt {
-    appearance: none;
-    width: 100%;
-    font: inherit;
-    color: inherit;
-    text-align: left;
-    background: transparent;
-    border: 1px solid transparent;
-    display: grid;
-    grid-template-columns: 1.75rem 1fr auto;
-    gap: 0.75rem;
-    align-items: start;
-    padding: 0.5rem 0.75rem;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  .opts:not(.locked) .opt:hover { background: var(--accent-soft); }
-  .opts.locked .opt { cursor: default; }
-  .opt .letter {
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: 50%;
-    border: 1px solid var(--rule);
-    display: grid;
-    place-items: center;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--muted);
-    background: var(--surface);
-    font-variant-numeric: tabular-nums;
-  }
-  .opt .txt { min-width: 0; padding-top: 0.125rem; }
-  .opt .tag {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding-top: 0.375rem;
-    white-space: nowrap;
-  }
-  .opt.picked { background: var(--accent-soft); border-color: var(--accent); }
-  .opt.picked .letter { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-  .opt.correct { background: var(--ok-soft); }
-  .opt.correct .letter { background: var(--ok); border-color: var(--ok); color: var(--bg); }
-  .opt.correct .txt { font-weight: 500; }
-  .opt.correct .tag { color: var(--ok); }
-  .opt.wrong { background: var(--no-soft); }
-  .opt.wrong .letter { background: var(--no); border-color: var(--no); color: var(--bg); }
-  .opt.wrong .tag { color: var(--no); }
-
-  /* True/false and blank toggles */
-  .seg {
-    display: inline-flex;
-    border: 1px solid var(--rule);
-    border-radius: 999px;
     overflow: hidden;
-    background: var(--surface);
+  }
+  @supports (min-height: 100dvh) {
+    .home { min-height: calc(100dvh - 4.75rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); }
+  }
+  .home::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: center;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 40% 50%, #000 30%, transparent 75%);
+    mask-image: radial-gradient(ellipse 70% 60% at 40% 50%, #000 30%, transparent 75%);
+    pointer-events: none;
+  }
+
+  .hero {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 3vw, 1.75rem);
+    padding-block: 2rem 4rem;
+  }
+  .hero h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(3.75rem, 15vw, 8.5rem);
+    line-height: 0.86;
+    letter-spacing: -0.02em;
+    display: flex;
+    flex-direction: column;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--accent);
+    padding-left: 0.55em;
+  }
+
+  /* Resistor symbol between two terminals */
+  .trace {
+    display: flex;
+    align-items: center;
+    max-width: 34rem;
+    color: var(--accent);
+  }
+  .trace .term {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    background: var(--bg);
     flex-shrink: 0;
   }
-  .seg button {
+  .trace .wire { flex: 1; height: 1.5px; background: var(--rule); }
+  .trace svg { width: 6.5rem; height: 1.25rem; flex-shrink: 0; }
+
+  .start {
     appearance: none;
-    border: 0;
-    background: transparent;
-    color: var(--muted);
-    font: 600 0.8125rem/1 var(--font-body);
-    padding: 0.5rem 0.75rem;
-    cursor: pointer;
-  }
-  .seg button + button { border-left: 1px solid var(--rule); }
-  .locked .seg button { cursor: default; }
-  .seg button.picked { background: var(--accent); color: var(--on-accent); }
-  .seg button.correct { background: var(--ok); color: var(--bg); }
-  .seg button.wrong { background: var(--no); color: var(--bg); }
-  .mark { font-weight: 700; width: 1rem; display: inline-block; text-align: center; }
-  .mark.ok { color: var(--ok); }
-  .mark.no { color: var(--no); }
-
-  .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); }
-  table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
-  th, td { text-align: left; vertical-align: top; padding: 0.625rem 0.875rem; border-bottom: 1px solid var(--rule); }
-  tr:last-child td { border-bottom: 0; }
-  th {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  td.ans { white-space: nowrap; width: 1%; }
-  td.ans .cell { display: flex; align-items: center; gap: 0.5rem; }
-
-  /* Fill in the blanks */
-  .blanks { display: flex; flex-direction: column; gap: 0.75rem; }
-  .blank { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; }
-  .blank .lbl { font-size: 0.875rem; font-weight: 600; color: var(--muted); min-width: 4.5rem; }
-
-  /* Matching */
-  .mlist { border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); }
-  .mrow {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(10rem, 15rem);
-    gap: 0.5rem 1rem;
+    align-self: flex-start;
+    display: inline-flex;
     align-items: center;
-    padding: 0.75rem 0.875rem;
-    border-bottom: 1px solid var(--rule);
-    font-size: 0.9375rem;
-  }
-  .mrow:last-child { border-bottom: 0; }
-  select {
-    width: 100%;
-    font: inherit;
-    font-size: 0.9375rem;
-    color: var(--fg);
-    background: var(--bg);
+    gap: 0.625rem;
+    padding: 0.625rem 1rem 0.625rem 0.75rem;
     border: 1px solid var(--rule);
-    border-radius: 8px;
-    padding: 0.5rem 0.625rem;
-  }
-  .mrow.correct select { border-color: var(--ok); }
-  .mrow.wrong select { border-color: var(--no); }
-  .fix { grid-column: 2; font-size: 0.8125rem; font-weight: 600; }
-  .fix.ok { color: var(--ok); }
-  .fix.no { color: var(--no); }
-
-  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; }
-  .progress { font-size: 0.8125rem; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .result { margin: 0; font-weight: 600; }
-  .result.right { color: var(--ok); }
-  .result.wrong { color: var(--no); }
-  .result.shown { color: var(--muted); }
-
-  .answer {
-    background: var(--accent-soft);
-    border-radius: 10px;
-    padding: 0.875rem 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-    max-width: 65ch;
-  }
-  .answer .label {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-  .answer p { margin: 0; }
-  .answer ol { margin: 0; padding-left: 1.375rem; display: flex; flex-direction: column; gap: 0.25rem; }
-  .answer ol li::marker { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
-
-  .key td:first-child { width: 1%; white-space: nowrap; color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
-
-  footer.wrap {
-    padding-block: 1.5rem 2.5rem;
-    border-top: 1px solid var(--rule);
-    font-size: 0.8125rem;
+    border-radius: 999px;
+    background: var(--surface);
     color: var(--muted);
+    font: 500 0.9375rem/1 var(--font-body);
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
   }
+  .start svg { width: 1.125rem; height: 1.125rem; color: var(--accent); }
+  .start:hover { color: var(--fg); border-color: var(--accent); }
+  .start:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  @media (max-width: 560px) {
-    summary { grid-template-columns: 2rem 1fr 1.25rem; gap: 0.75rem; }
-    .num { font-size: 1.375rem; }
-    .body { padding-left: 0.25rem; }
-    .opt { padding: 0.5rem; gap: 0.625rem; }
-    .mrow { grid-template-columns: 1fr; }
-    .fix { grid-column: auto; }
-    th, td { padding: 0.625rem; }
-    .bar .btn { padding: 0.625rem 0.875rem; font-size: 0.875rem; }
-  }
   @media (prefers-reduced-motion: reduce) {
-    .chev, .btn svg { transition: none; }
+    .start { transition: none; }
   }
 </style>
 </head>
-<body>
+<body data-page="home">
 
-<header class="wrap">
-  <p class="eyebrow">Study Guide</p>
-  <h1>Dos Santos <em>Jesus</em></h1>
-  <div class="topic">
-    <h2>Measuring Instruments: Revision Quiz</h2>
-    <p>22 questions in the same order as the assessment. Open a question, answer it, then check. The answer appears at the bottom of each question.</p>
+<header class="topbar">
+  <div class="wrap">
+    <button class="menu-btn" type="button" data-menu-open aria-controls="site-menu" aria-expanded="false" aria-label="Open menu">
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 5.5h14M3 10h14M3 14.5h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
   </div>
 </header>
 
-<div class="bar">
-  <div class="wrap">
-    <p class="score" id="score" aria-live="polite"><strong>0 right</strong> · 0 of 22 done</p>
-    <div class="bar-actions">
-      <button class="btn ghost" id="reset-all" type="button">Reset quiz</button>
-      <button class="btn" id="toggle-all" type="button" aria-pressed="false">
-        <span id="toggle-label">Open all</span>
-        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
+<main class="home">
+  <div class="wrap hero">
+    <p class="eyebrow">Study Guide</p>
+    <h1><span>Dos Santos</span> <em>Jesus</em></h1>
+    <div class="trace" aria-hidden="true">
+      <span class="term"></span>
+      <span class="wire"></span>
+      <svg viewBox="0 0 104 20" fill="none"><path d="M0 10h14l5-8 10 16 10-16 10 16 10-16 10 16 10-16 5 8h20" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      <span class="wire"></span>
+      <span class="term"></span>
     </div>
+    <button class="start" type="button" data-menu-open aria-controls="site-menu" aria-expanded="false">
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 5.5h14M3 10h14M3 14.5h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Choose a topic
+    </button>
   </div>
-</div>
-
-<main class="wrap">
-  <div class="qs" id="qs"></div>
-  <noscript><p>Turn on JavaScript to use the quiz.</p></noscript>
 </main>
 
-<footer class="wrap">Dos Santos Jesus Study Guide · Measuring Instruments</footer>
-
-<script>
-const QUESTIONS = [
-  { n: 1, type: "mc", title: "Meter connected across a component",
-    prompt: "In a powered 4.5 V circuit, an analogue meter's + terminal connects to the top (positive side) of R2, and its − terminal connects to the bottom of R2. Select the correct response.",
-    options: ["The meter is connected to measure current.", "The meter is connected to measure resistance.", "The meter is connected to measure voltage.", "The meter will be damaged as the leads are reversed."],
-    correct: ["c"],
-    answer: "c. The meter is connected to measure voltage. It's across R2 (in parallel), with the circuit powered.",
-    key: "c. Voltage." },
-
-  { n: 2, type: "tf", title: "Voltage testers: true or false",
-    rows: [
-      ["Non-contact voltage testers operate by detecting an electric field, making operation safer due to no contact required.", true],
-      ["Non-contact voltage testers will detect DC voltages only.", false],
-      ["LED, neon and solenoid testers require care to be taken during measurement due to being in contact with a live source.", true],
-      ["Voltage testers give an accurate voltage measurement.", false],
-      ["Voltage testers are used by technicians to indicate the presence of live circuits.", true],
-      ["Non-contact voltage testers require the tip to be placed in close proximity to the circuit being tested.", true]
-    ],
-    why: "Non-contact testers detect AC only. Voltage testers indicate that voltage is present; they don't measure it.",
-    key: "T, F, T, F, T, T." },
-
-  { n: 3, type: "mc", kind: "Select three", title: "Which of the following are safety requirement statements when using measuring devices? (Select three)",
-    options: ["Hold probe tips with bare hands while taking live measurements to improve accuracy.", "If you are confident in the workplace you do not need to review safety requirements.", "Open equipment should be considered live (energised) until isolation is proven.", "Wherever possible, switch off, unplug and discharge equipment under repair.", "Watches, rings and jewellery should be removed."],
-    correct: ["c", "d", "e"],
-    answer: "c, d, e.",
-    key: "c, d, e." },
-
-  { n: 4, type: "match", title: "Match the test equipment to the task it is used for",
-    rows: [
-      ["Simple, easy to use, with contact required for testing for a live circuit", "Neon Tester"],
-      ["Meter incorporating voltage, current and resistance measurement functions", "Digital / Analog Multimeter"],
-      ["Non-contact tester for testing for live (energised) terminals and tracing breaks along cables", "Volt Stick (LED or Lamp)"],
-      ["Non-contact, high current measurements", "Clamp Meter"],
-      ["Rugged voltage indicator (approx. 12 to 600 V) suited to noisy, poorly illuminated or very bright surroundings due to its vibration and sound function", "Solenoid Tester"],
-      ["Testing for current leakage caused by faulty or damaged insulation", "Insulation Resistance Tester"]
-    ],
-    answer: "From the top task down: Neon Tester, Digital / Analog Multimeter, Volt Stick (LED or Lamp), Clamp Meter, Solenoid Tester, Insulation Resistance Tester.",
-    key: "Neon, Multimeter, Volt Stick, Clamp Meter, Solenoid, Insulation (top to bottom)." },
-
-  { n: 5, type: "order", title: "What are the four steps that must occur before using a tester (multimeter / voltage indicator) to ensure serviceability? Put them in order.",
-    given: ["Test the meter on a 'known voltage source' to confirm meter operation.", "Conduct a continuity test (confirm conductor serviceability).", "Physical inspection of the case and leads.", "Check the calibration date (if applicable)."],
-    order: ["Physical inspection of the case and leads.", "Check the calibration date (if applicable).", "Conduct a continuity test (confirm conductor serviceability).", "Test the meter on a 'known voltage source' to confirm meter operation."],
-    key: "Inspect case and leads → check calibration date → continuity test → test on a known voltage source." },
-
-  { n: 6, type: "fill", title: "Complete the sentence",
-    prompt: "When measuring resistance with a multimeter, the probes should be connected in ______ (series / parallel) with the component, and the circuit should be ______ (energised / de-energised).",
-    blanks: [
-      { choices: ["series", "parallel"], answer: "parallel" },
-      { choices: ["energised", "de-energised"], answer: "de-energised" }
-    ],
-    answer: "Parallel; de-energised. Resistance is measured across the component with the power off, because the meter supplies its own test current.",
-    key: "Parallel; de-energised." },
-
-  { n: 7, type: "order", title: "Insulation resistance test: put the steps in order",
-    given: ["Read and record the measurement.", "Connect the black lead to the ground side to be measured.", "Determine and select the measurement voltage relevant to industry standards.", "Isolate the circuit to be tested.", "Complete the TEST process IAW manufacturer's instructions.", "Verify that the MEASURE key is not in the measure position.", "Connect the red lead to the line being measured."],
-    order: ["Isolate the circuit to be tested.", "Verify that the MEASURE key is not in the measure position.", "Determine and select the measurement voltage relevant to industry standards.", "Connect the black lead to the ground side to be measured.", "Connect the red lead to the line being measured.", "Complete the TEST process IAW manufacturer's instructions.", "Read and record the measurement."],
-    key: "Isolate → MEASURE key off → select voltage → black lead to ground → red lead to line → test → read and record." },
-
-  { n: 8, type: "mc", kind: "Select five", title: "When selecting a meter, which of the following should be considered? (Select five)",
-    options: ["Range/s", "Cost", "Manufacturer", "Type of measurement required", "Accuracy", "Internal resistance", "Analogue/Digital"],
-    correct: ["a", "d", "e", "f", "g"],
-    answer: "a, d, e, f, g. Cost and manufacturer are purchasing considerations, not technical ones.",
-    key: "a, d, e, f, g." },
-
-  { n: 9, type: "mc", title: "Bridge circuit",
-    prompt: "A bridge circuit has R1 = 200 Ω, R2 = 200 Ω, Rs = 1 kΩ and Rx unknown. For a balanced circuit, what is the resistance value of Rx?",
-    options: ["200 Ω", "Depends on the voltage", "1.2 kΩ", "1 kΩ"],
-    correct: ["d"],
-    answer: "d. 1 kΩ. With R1 = R2, the bridge balances when Rx equals Rs.",
-    key: "d. 1 kΩ." },
-
-  { n: 10, type: "mc", title: "Reading an analogue scale",
-    prompt: "An analogue multimeter has 0–250, 0–50 and 0–10 DCV scales. The switch is set to the 1 DCV position, and the needle sits at 8.8 on the 0–10 scale. What value is being displayed?",
-    options: ["0.45 Vdc", "0.88 Vdc", "21.2 Vdc", "8.8 Vdc"],
-    correct: ["b"],
-    answer: "b. 0.88 Vdc. On the 1 V range, read the 0–10 scale and divide by 10.",
-    key: "b. 0.88 Vdc." },
-
-  { n: 11, type: "tf", title: "Analogue vs digital multimeters: true or false",
-    rows: [
-      ["Analog multimeters require zeroing prior to resistance measurements.", true],
-      ["Digital multimeters have lower input impedance (resistance) than analog multimeters for voltage measurements.", false],
-      ["Range and polarity of the leads are critical for analog multimeters to avoid full scale deflection and meter damage.", true],
-      ["Digital multimeters are simpler to use than analog.", true],
-      ["Digital multimeters are subject to parallax error.", false],
-      ["Digital multimeters respond quicker than analog multimeters.", false],
-      ["Analog meters are auto-ranging.", false],
-      ["A voltmeter is an instrument used to measure voltages of either direct or alternating current, in volts.", true],
-      ["An ammeter is an instrument for measuring either direct or alternating current, in amperes.", true]
-    ],
-    why: "DMMs have higher input impedance (about 10 MΩ). Parallax only affects needle meters. Analogue meters respond faster to changing values. Auto-ranging is a digital feature.",
-    key: "T, F, T, T, F, F, F, T, T." },
-
-  { n: 12, type: "mc", title: "Which of the following is NOT a consequence of connecting an ammeter in parallel with a component?",
-    options: ["Meter loading effect", "Short circuit across the component", "Blowing the internal fuse of the meter", "Increase of measurement accuracy"],
-    correct: ["d"],
-    answer: "d. Increase of measurement accuracy. An ammeter in parallel shorts the component, can blow the meter's fuse and loads the circuit. Accuracy never improves.",
-    key: "d. Increase of measurement accuracy." },
-
-  { n: 13, type: "mc", title: "Meter loading",
-    prompt: "A 15 V supply feeds a closed switch S1, R1 (5 MΩ) and R2 (10 MΩ) in series. A multimeter with 10 MΩ internal resistance and ±2% accuracy is connected across R2. What voltage will the meter display?",
-    options: ["10.00 Vdc", "7.50 Vdc", "15.00 Vdc", "5.00 Vdc"],
-    correct: ["b"],
-    answer: "b. 7.50 Vdc (7.35–7.65 V with ±2%). The meter's 10 MΩ in parallel with R2's 10 MΩ gives 5 MΩ, so the 15 V splits evenly with R1. Without the meter, R2 would have 10 V.",
-    key: "b. 7.50 Vdc." },
-
-  { n: 14, type: "mc", kind: "True or false", letters: false, title: "True or false",
-    prompt: "For the measurement in question 13, the loading effect of the meter has affected the operation of the circuit.",
-    options: ["True", "False"],
-    correct: ["a"],
-    answer: "True. Connecting the meter dropped R2's voltage from 10 V to 7.5 V.",
-    key: "True." },
-
-  { n: 15, type: "mc", title: "Referring to meters, which of the following statements is correct?",
-    options: ["Ammeter internal resistance must be extremely low to reduce the loading effect on the circuit.", "Meter internal resistance does not affect circuit operation.", "Voltmeter internal resistance must be very low to reduce the loading effect on the circuit.", "Ammeter internal resistance must be high to reduce the loading effect on the circuit."],
-    correct: ["a"],
-    answer: "a. An ammeter (in series) needs very low resistance, and a voltmeter (in parallel) needs very high resistance.",
-    key: "a." },
-
-  { n: 16, type: "mc", title: "What is the function of the reflective strip behind the needle of an analogue meter?",
-    options: ["Makes small needle variations more visible to the operator.", "Assists the operator to view the needle at 90 degrees to reduce parallax error.", "Provides a lamp background function.", "Removes stray magnetic fields from affecting needle movement."],
-    correct: ["b"],
-    answer: "b. The strip is a mirror. When the needle hides its own reflection, your eye is square to the scale.",
-    key: "b." },
-
-  { n: 17, type: "mc", title: "Reading a negative value",
-    prompt: "A digital multimeter is connected across R2 in a 4.5 V circuit. The black (COM) lead is on the top (positive) side of R2, and the red lead is on the bottom (negative) side. The display reads -3.24. Select the correct statement.",
-    options: ["The multimeter is connected correctly and is measuring DC voltage.", "The multimeter probes are connected reversed.", "The multimeter is connected correctly and is measuring current.", "The multimeter is connected correctly and is measuring resistance."],
-    correct: ["b"],
-    answer: "b. The probes are connected reversed. COM on the positive side gives a negative reading.",
-    key: "b. The probes are connected reversed." },
-
-  { n: 18, type: "mc", title: "When an analogue needle moves to its furthest point, what is this known as?",
-    options: ["Full scale movement", "Maximum deflection", "Full scale deflection", "Partial deflection"],
-    correct: ["c"],
-    answer: "c. Full scale deflection (FSD).",
-    key: "c. Full scale deflection (FSD)." },
-
-  { n: 19, type: "mc", title: "Meter wired into the circuit",
-    prompt: "An analogue meter is wired into a break in the circuit, between switch S1 and R1. Its + terminal goes towards the battery positive, and its − terminal goes towards R1. Select the correct response.",
-    options: ["The meter is connected to measure voltage.", "The meter is connected to measure current.", "The meter is connected to measure resistance.", "The meter will be damaged as the leads are reversed."],
-    correct: ["b"],
-    answer: "b. The meter is connected to measure current. It's in series, in a break in the circuit, with correct polarity.",
-    key: "b. Current." },
-
-  { n: 20, type: "mc", title: "What does the purpose of a calibration on measurement equipment ensure?",
-    options: ["Accuracy of measurements", "Meter serviceability", "Use by date has not expired", "All of the above"],
-    correct: ["a"],
-    answer: "a. Accuracy of measurements.",
-    key: "a. Accuracy of measurements." },
-
-  { n: 21, type: "mc", kind: "Select three", title: "What hazards or issues may be evident if measuring devices are used incorrectly? (Select three)",
-    options: ["Electric shock", "The device doesn't work, no hazards occur", "Inaccurate / false measurements", "Damage to analog tester due to incorrect polarity and range", "Elimination of the need to use PPE"],
-    correct: ["a", "c", "d"],
-    answer: "a, c, d.",
-    key: "a, c, d." },
-
-  { n: 22, type: "mc", kind: "Select three", title: "Which of the following describe effects of electrical current and relevant industry principles for protection against current damage and metal corrosion? (Select three)",
-    options: ["Industry standards allow unrestricted current flow as long as personal protective equipment (PPE) is worn.", "Electrical current can accelerate corrosion in metals through electrochemical reactions, particularly in the presence of moisture, leading to material degradation and failure, addressed by use of sacrificial anodes and protective coatings. Electrical current prevents corrosion by strengthening metallic bonds once installed in a circuit.", "Excessive current can cause overheating of conductors and components, leading to insulation failure, fire risk and equipment damage, addressed through protective devices such as fuses and circuit breakers.", "Electrical current flowing through the human body can cause effects ranging from muscle contraction to fatal injury, which is why industry standards specify limits on safe touch voltages and currents."],
-    correct: ["b", "c", "d"],
-    answer: "b, c, d.",
-    key: "b, c, d." }
-];
-
-const KIND = { mc: "Multiple choice", tf: "True or false", order: "Put in order", match: "Matching", fill: "Fill in the blanks" };
-const LETTERS = "abcdefghij";
-const WORDS = { 2: "two", 3: "three", 4: "four", 5: "five" };
-const state = new Map();
-const resets = [];
-
-function el(tag, cls, text) {
-  const node = document.createElement(tag);
-  if (cls) node.className = cls;
-  if (text != null) node.textContent = text;
-  return node;
-}
-function button(cls, text) {
-  const b = el("button", cls, text);
-  b.type = "button";
-  return b;
-}
-function chevron() {
-  const ns = "http://www.w3.org/2000/svg";
-  const svg = document.createElementNS(ns, "svg");
-  svg.setAttribute("viewBox", "0 0 20 20");
-  svg.setAttribute("fill", "none");
-  svg.setAttribute("aria-hidden", "true");
-  svg.setAttribute("class", "chev");
-  const path = document.createElementNS(ns, "path");
-  path.setAttribute("d", "M5 7.5l5 5 5-5");
-  path.setAttribute("stroke", "currentColor");
-  path.setAttribute("stroke-width", "2");
-  path.setAttribute("stroke-linecap", "round");
-  path.setAttribute("stroke-linejoin", "round");
-  svg.appendChild(path);
-  return svg;
-}
-function answerBox(label, text) {
-  const box = el("div", "answer");
-  box.appendChild(el("span", "label", label));
-  if (text) box.appendChild(el("p", null, text));
-  return box;
-}
-function tableOf(headers, rows, cls) {
-  const wrap = el("div", "table-wrap" + (cls ? " " + cls : ""));
-  const table = el("table");
-  const thead = el("thead");
-  const hr = el("tr");
-  headers.forEach(h => hr.appendChild(el("th", null, h)));
-  thead.appendChild(hr);
-  const tbody = el("tbody");
-  rows.forEach(r => tbody.appendChild(r));
-  table.append(thead, tbody);
-  wrap.appendChild(table);
-  return wrap;
-}
-function seg(labels, onPick) {
-  const wrap = el("div", "seg");
-  wrap.setAttribute("role", "group");
-  const btns = labels.map((label, i) => {
-    const b = button(null, label);
-    b.setAttribute("aria-pressed", "false");
-    b.addEventListener("click", () => onPick(i));
-    wrap.appendChild(b);
-    return b;
-  });
-  return { wrap, btns };
-}
-function setMark(mark, ok) {
-  mark.textContent = ok ? "✓" : "✗";
-  mark.className = "mark " + (ok ? "ok" : "no");
-  mark.setAttribute("aria-label", ok ? "Right" : "Wrong");
-}
-function clearMark(mark) {
-  mark.textContent = "";
-  mark.className = "mark";
-  mark.removeAttribute("aria-label");
-}
-
-/* Multiple choice (one answer checks straight away; several answers use Check) */
-function buildMC(q, api) {
-  const multi = q.correct.length > 1;
-  const picks = new Set();
-  const list = el("div", "opts");
-  const items = q.options.map((text, i) => {
-    const L = LETTERS[i];
-    const b = button("opt");
-    b.setAttribute("aria-pressed", "false");
-    const tag = el("span", "tag");
-    b.append(el("span", "letter", q.letters === false ? text[0] : L), el("span", "txt", text), tag);
-    b.addEventListener("click", () => {
-      if (api.locked) return;
-      if (multi) { picks.has(L) ? picks.delete(L) : picks.add(L); }
-      else { picks.clear(); picks.add(L); }
-      paint();
-      api.changed();
-      if (!multi) api.check();
-    });
-    list.appendChild(b);
-    return { L, b, tag };
-  });
-  function paint() {
-    items.forEach(({ L, b }) => {
-      const on = picks.has(L);
-      b.classList.toggle("picked", on);
-      b.setAttribute("aria-pressed", String(on));
-    });
-  }
-  return {
-    node: list,
-    auto: !multi,
-    hint: multi ? `Pick ${WORDS[q.correct.length]}, then check your answer.` : "Pick one.",
-    progress: () => multi ? `${picks.size} of ${q.correct.length} picked` : "",
-    complete: () => multi ? picks.size === q.correct.length : picks.size === 1,
-    grade: () => {
-      const hits = q.correct.filter(c => picks.has(c)).length;
-      return { right: hits === q.correct.length && picks.size === q.correct.length, detail: multi ? `${hits} of ${q.correct.length} right.` : "" };
-    },
-    reveal: () => {
-      list.classList.add("locked");
-      items.forEach(({ L, b, tag }) => {
-        const isCorrect = q.correct.includes(L), picked = picks.has(L);
-        b.classList.remove("picked");
-        if (isCorrect) { b.classList.add("correct"); tag.textContent = multi && picks.size && !picked ? "Missed" : "Correct"; }
-        else if (picked) { b.classList.add("wrong"); tag.textContent = "Your pick"; }
-      });
-    },
-    reset: () => {
-      picks.clear();
-      list.classList.remove("locked");
-      items.forEach(({ b, tag }) => { b.classList.remove("correct", "wrong"); tag.textContent = ""; });
-      paint();
-    }
-  };
-}
-
-/* True or false tables */
-function buildTF(q, api) {
-  const picks = q.rows.map(() => null);
-  const ui = [];
-  const trs = q.rows.map(([stmt], i) => {
-    const tr = el("tr");
-    tr.appendChild(el("td", null, stmt));
-    const td = el("td", "ans");
-    const cell = el("div", "cell");
-    const s = seg(["True", "False"], k => {
-      if (api.locked) return;
-      picks[i] = k === 0;
-      paint(i);
-      api.changed();
-    });
-    const mark = el("span", "mark");
-    cell.append(s.wrap, mark);
-    td.appendChild(cell);
-    tr.appendChild(td);
-    ui.push({ s, mark });
-    return tr;
-  });
-  function paint(i) {
-    ui[i].s.btns.forEach((b, k) => {
-      const on = picks[i] !== null && (k === 0) === picks[i];
-      b.classList.toggle("picked", on);
-      b.setAttribute("aria-pressed", String(on));
-    });
-  }
-  const node = tableOf(["Statement", "Your answer"], trs);
-  return {
-    node,
-    hint: "Pick True or False for each statement, then check your answers.",
-    progress: () => `${picks.filter(v => v !== null).length} of ${picks.length} answered`,
-    complete: () => picks.every(v => v !== null),
-    grade: () => {
-      const n = q.rows.filter(([, v], i) => picks[i] === v).length;
-      return { right: n === q.rows.length, detail: `${n} of ${q.rows.length} right.` };
-    },
-    reveal: () => {
-      node.classList.add("locked");
-      q.rows.forEach(([, v], i) => {
-        ui[i].s.btns.forEach((b, k) => {
-          const isTrue = k === 0;
-          b.classList.remove("picked");
-          if (isTrue === v) b.classList.add("correct");
-          else if (picks[i] === isTrue) b.classList.add("wrong");
-        });
-        if (picks[i] !== null) setMark(ui[i].mark, picks[i] === v);
-      });
-    },
-    reset: () => {
-      node.classList.remove("locked");
-      picks.fill(null);
-      ui.forEach(({ s, mark }, i) => {
-        s.btns.forEach(b => b.classList.remove("correct", "wrong"));
-        clearMark(mark);
-        paint(i);
-      });
-    }
-  };
-}
-
-/* Put steps in order: tap to number them */
-function buildOrder(q, api) {
-  const seq = [];
-  const list = el("div", "opts");
-  const items = q.given.map((text, i) => {
-    const b = button("opt");
-    b.setAttribute("aria-pressed", "false");
-    const slot = el("span", "letter", "");
-    const tag = el("span", "tag");
-    b.append(slot, el("span", "txt", text), tag);
-    b.addEventListener("click", () => {
-      if (api.locked) return;
-      const at = seq.indexOf(i);
-      if (at >= 0) seq.splice(at, 1); else seq.push(i);
-      paint();
-      api.changed();
-    });
-    list.appendChild(b);
-    return { b, slot, tag, text };
-  });
-  function paint() {
-    items.forEach((it, i) => {
-      const at = seq.indexOf(i);
-      it.slot.textContent = at >= 0 ? String(at + 1) : "";
-      it.b.classList.toggle("picked", at >= 0);
-      it.b.setAttribute("aria-pressed", String(at >= 0));
-    });
-  }
-  return {
-    node: list,
-    hint: "Tap the steps in the order you think is right. Tap a numbered step to undo it.",
-    progress: () => `${seq.length} of ${q.given.length} placed`,
-    complete: () => seq.length === q.given.length,
-    grade: () => {
-      const n = seq.filter((gi, pos) => q.given[gi] === q.order[pos]).length;
-      return { right: n === q.order.length, detail: `${n} of ${q.order.length} in the right place.` };
-    },
-    reveal: () => {
-      list.classList.add("locked");
-      items.forEach((it, i) => {
-        const at = seq.indexOf(i);
-        const should = q.order.indexOf(it.text);
-        it.b.classList.remove("picked");
-        if (at === -1) { it.slot.textContent = String(should + 1); it.b.classList.add("correct"); }
-        else if (at === should) { it.b.classList.add("correct"); }
-        else { it.b.classList.add("wrong"); it.tag.textContent = `Should be ${should + 1}`; }
-      });
-    },
-    reset: () => {
-      seq.length = 0;
-      list.classList.remove("locked");
-      items.forEach(it => { it.b.classList.remove("correct", "wrong"); it.tag.textContent = ""; });
-      paint();
-    }
-  };
-}
-
-/* Matching: a dropdown for each task */
-function buildMatch(q, api) {
-  const choices = [...new Set(q.rows.map(r => r[1]))].sort((a, b) => a.localeCompare(b));
-  const list = el("div", "mlist");
-  const rows = q.rows.map(([task, ans], i) => {
-    const row = el("div", "mrow");
-    const sel = el("select");
-    sel.id = `q${q.n}-row${i}`;
-    const lab = el("label", null, task);
-    lab.htmlFor = sel.id;
-    const ph = el("option", null, "Choose equipment…");
-    ph.value = "";
-    sel.appendChild(ph);
-    choices.forEach(c => { const o = el("option", null, c); o.value = c; sel.appendChild(o); });
-    sel.addEventListener("change", () => api.changed());
-    const fix = el("span", "fix");
-    fix.hidden = true;
-    row.append(lab, sel, fix);
-    list.appendChild(row);
-    return { row, sel, fix, ans };
-  });
-  return {
-    node: list,
-    hint: "Choose the test equipment for each task, then check your answers.",
-    progress: () => `${rows.filter(r => r.sel.value).length} of ${rows.length} chosen`,
-    complete: () => rows.every(r => r.sel.value),
-    grade: () => {
-      const n = rows.filter(r => r.sel.value === r.ans).length;
-      return { right: n === rows.length, detail: `${n} of ${rows.length} right.` };
-    },
-    reveal: () => rows.forEach(r => {
-      const ok = r.sel.value === r.ans;
-      r.sel.disabled = true;
-      if (r.sel.value) r.row.classList.add(ok ? "correct" : "wrong");
-      r.fix.hidden = false;
-      r.fix.textContent = ok ? "✓ Correct" : (r.sel.value ? "✗ Answer: " : "Answer: ") + r.ans;
-      r.fix.className = "fix " + (ok || !r.sel.value ? "ok" : "no");
-    }),
-    reset: () => rows.forEach(r => {
-      r.sel.disabled = false;
-      r.sel.value = "";
-      r.row.classList.remove("correct", "wrong");
-      r.fix.hidden = true;
-      r.fix.textContent = "";
-    })
-  };
-}
-
-/* Fill in the blanks */
-function buildFill(q, api) {
-  const picks = q.blanks.map(() => null);
-  const wrap = el("div", "blanks");
-  const ui = q.blanks.map((bl, i) => {
-    const row = el("div", "blank");
-    row.appendChild(el("span", "lbl", `Blank ${i + 1}`));
-    const s = seg(bl.choices, k => {
-      if (api.locked) return;
-      picks[i] = k;
-      paint(i);
-      api.changed();
-    });
-    const mark = el("span", "mark");
-    row.append(s.wrap, mark);
-    wrap.appendChild(row);
-    return { s, mark };
-  });
-  function paint(i) {
-    ui[i].s.btns.forEach((b, k) => {
-      const on = picks[i] === k;
-      b.classList.toggle("picked", on);
-      b.setAttribute("aria-pressed", String(on));
-    });
-  }
-  return {
-    node: wrap,
-    hint: "Choose a word for each blank, then check your answer.",
-    progress: () => `${picks.filter(v => v !== null).length} of ${picks.length} filled`,
-    complete: () => picks.every(v => v !== null),
-    grade: () => {
-      const n = q.blanks.filter((bl, i) => bl.choices[picks[i]] === bl.answer).length;
-      return { right: n === q.blanks.length, detail: `${n} of ${q.blanks.length} right.` };
-    },
-    reveal: () => {
-      wrap.classList.add("locked");
-      q.blanks.forEach((bl, i) => {
-        ui[i].s.btns.forEach((b, k) => {
-          b.classList.remove("picked");
-          if (bl.choices[k] === bl.answer) b.classList.add("correct");
-          else if (picks[i] === k) b.classList.add("wrong");
-        });
-        if (picks[i] !== null) setMark(ui[i].mark, bl.choices[picks[i]] === bl.answer);
-      });
-    },
-    reset: () => {
-      wrap.classList.remove("locked");
-      picks.fill(null);
-      ui.forEach(({ s, mark }, i) => {
-        s.btns.forEach(b => b.classList.remove("correct", "wrong"));
-        clearMark(mark);
-        paint(i);
-      });
-    }
-  };
-}
-
-const BUILDERS = { mc: buildMC, tf: buildTF, order: buildOrder, match: buildMatch, fill: buildFill };
-
-function answerFor(q) {
-  if (q.type === "order") {
-    const box = answerBox("Correct order");
-    const ol = el("ol");
-    q.order.forEach(step => ol.appendChild(el("li", null, step)));
-    box.appendChild(ol);
-    return box;
-  }
-  if (q.type === "tf") return answerBox("Answer", q.key + " " + q.why);
-  return answerBox("Answer", q.answer);
-}
-
-function renderQuestion(q) {
-  const d = el("details", "q");
-  d.id = "q" + q.n;
-
-  const s = el("summary");
-  s.appendChild(el("span", "num", String(q.n)));
-  const qt = el("span", "qt");
-  qt.appendChild(el("span", "title", q.title));
-  const meta = el("span", "meta");
-  meta.appendChild(el("span", "kind", q.kind || KIND[q.type]));
-  const pill = el("span", "status");
-  pill.hidden = true;
-  meta.appendChild(pill);
-  qt.appendChild(meta);
-  s.append(qt, chevron());
-  d.appendChild(s);
-
-  const body = el("div", "body");
-  if (q.prompt) body.appendChild(el("p", "prompt", q.prompt));
-
-  const api = { locked: false };
-  const b = BUILDERS[q.type](q, api);
-  body.appendChild(b.node);
-
-  const hint = el("p", "hint", b.hint);
-  const actions = el("div", "actions");
-  const checkBtn = button("btn small", "Check answer");
-  const showBtn = button("btn small ghost", "Show answer");
-  const retryBtn = button("btn small ghost", "Try again");
-  const prog = el("span", "progress");
-  retryBtn.hidden = true;
-  checkBtn.hidden = !!b.auto;
-  actions.append(checkBtn, showBtn, retryBtn, prog);
-  const result = el("p", "result");
-  result.hidden = true;
-  result.setAttribute("aria-live", "polite");
-  const answer = answerFor(q);
-  answer.hidden = true;
-  body.append(hint, result, actions, answer);
-  d.appendChild(body);
-
-  api.changed = () => {
-    checkBtn.disabled = !b.complete();
-    prog.textContent = b.progress();
-  };
-  function finish(status, detail) {
-    api.locked = true;
-    b.reveal();
-    hint.hidden = true;
-    checkBtn.hidden = true;
-    showBtn.hidden = true;
-    retryBtn.hidden = false;
-    prog.textContent = "";
-    result.hidden = false;
-    result.className = "result " + status;
-    result.textContent = status === "right" ? "Correct!" : status === "wrong" ? ("Not quite. " + (detail || "")).trim() : "Answer shown.";
-    answer.hidden = false;
-    pill.hidden = false;
-    pill.className = "status " + status;
-    pill.textContent = status === "right" ? "Correct" : status === "wrong" ? "Wrong" : "Shown";
-    state.set(q.n, status);
-    updateScore();
-  }
-  api.check = () => {
-    if (api.locked || !b.complete()) return;
-    const g = b.grade();
-    finish(g.right ? "right" : "wrong", g.detail);
-  };
-  checkBtn.addEventListener("click", api.check);
-  showBtn.addEventListener("click", () => finish("shown"));
-  function reset() {
-    api.locked = false;
-    b.reset();
-    hint.hidden = false;
-    checkBtn.hidden = !!b.auto;
-    showBtn.hidden = false;
-    retryBtn.hidden = true;
-    result.hidden = true;
-    answer.hidden = true;
-    pill.hidden = true;
-    state.delete(q.n);
-    api.changed();
-    updateScore();
-  }
-  retryBtn.addEventListener("click", reset);
-  resets.push(reset);
-  api.changed();
-  return d;
-}
-
-function renderKey() {
-  const d = el("details", "q key");
-  d.id = "answer-key";
-  const s = el("summary");
-  s.appendChild(el("span", "num", "✓"));
-  const qt = el("span", "qt");
-  qt.appendChild(el("span", "title", "Quick answer key"));
-  const meta = el("span", "meta");
-  meta.appendChild(el("span", "kind", "All 22 answers on one screen"));
-  qt.appendChild(meta);
-  s.append(qt, chevron());
-  d.appendChild(s);
-  const body = el("div", "body");
-  const rows = QUESTIONS.map(q => {
-    const tr = el("tr");
-    tr.appendChild(el("td", null, String(q.n)));
-    tr.appendChild(el("td", null, q.key));
-    return tr;
-  });
-  body.appendChild(tableOf(["Q", "Answer"], rows));
-  d.appendChild(body);
-  return d;
-}
-
-const scoreEl = document.getElementById("score");
-function updateScore() {
-  const done = state.size;
-  const right = [...state.values()].filter(v => v === "right").length;
-  scoreEl.innerHTML = "";
-  scoreEl.append(el("strong", null, `${right} right`), document.createTextNode(` · ${done} of ${QUESTIONS.length} done`));
-}
-
-const list = document.getElementById("qs");
-QUESTIONS.forEach(q => list.appendChild(renderQuestion(q)));
-list.appendChild(renderKey());
-
-const questionDetails = Array.from(list.querySelectorAll("details.q:not(.key)"));
-const toggleBtn = document.getElementById("toggle-all");
-const toggleLabel = document.getElementById("toggle-label");
-function refreshToggle() {
-  const allOpen = questionDetails.every(d => d.open);
-  toggleLabel.textContent = allOpen ? "Close all" : "Open all";
-  toggleBtn.setAttribute("aria-pressed", String(allOpen));
-}
-toggleBtn.addEventListener("click", () => {
-  const openAll = questionDetails.some(d => !d.open);
-  questionDetails.forEach(d => { d.open = openAll; });
-  refreshToggle();
-});
-questionDetails.forEach(d => d.addEventListener("toggle", refreshToggle));
-
-const resetBtn = document.getElementById("reset-all");
-let armed = null;
-resetBtn.addEventListener("click", () => {
-  if (!armed) {
-    resetBtn.textContent = "Tap again to reset";
-    armed = setTimeout(() => { armed = null; resetBtn.textContent = "Reset quiz"; }, 3000);
-    return;
-  }
-  clearTimeout(armed);
-  armed = null;
-  resetBtn.textContent = "Reset quiz";
-  resets.forEach(r => r());
-});
-
-refreshToggle();
-updateScore();
-</script>
+<script src="assets/site.js" data-root=""></script>
 </body>
 </html>
