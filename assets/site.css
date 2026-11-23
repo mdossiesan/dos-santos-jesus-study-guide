@@ -317,3 +317,31 @@ body::before {
   html { scroll-behavior: auto; }
   .scrim, .drawer, .group-btn svg, .menu-btn { transition: none; }
 }
+
+/* Seamless motion: pages cross-fade, things fade in and out as they scroll in and out of view, gentle entrances */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: page-out 0.22s ease both; }
+::view-transition-new(root) { animation: page-in 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes page-out { to { opacity: 0; transform: translateY(-10px); } }
+@keyframes page-in { from { opacity: 0; transform: translateY(14px); } }
+@keyframes rise { from { opacity: 0; translate: 0 16px; } }
+@keyframes pop { from { opacity: 0; translate: 0 6px; } }
+
+.js-reveal .reveal {
+  opacity: 0;
+  translate: 0 32px;
+  transition: opacity 0.55s ease var(--delay, 0s), translate 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--delay, 0s);
+}
+.js-reveal .reveal[data-side="top"] { translate: 0 -32px; }
+.js-reveal .reveal.in { opacity: 1; translate: 0 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .page-head > * { animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .page-head > :nth-child(2) { animation-delay: 0.06s; }
+  .page-head > :nth-child(3) { animation-delay: 0.12s; }
+  .page-head > :nth-child(4) { animation-delay: 0.18s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  .js-reveal .reveal { opacity: 1; translate: none; transition: none; }
+}

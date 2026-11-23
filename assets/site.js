@@ -110,12 +110,56 @@
       document.documentElement.classList.remove("menu-open");
     });
   });
+  var REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   drawer.querySelectorAll(".group-btn").forEach(function (btn) {
     btn.addEventListener("click", function () {
       var list = document.getElementById(btn.getAttribute("aria-controls"));
       var expanded = btn.getAttribute("aria-expanded") === "true";
       btn.setAttribute("aria-expanded", String(!expanded));
-      list.hidden = expanded;
+      if (list._anim) { list._anim.cancel(); list._anim = null; }
+      if (REDUCE || !list.animate) { list.hidden = expanded; return; }
+      list.hidden = false;
+      var h = list.scrollHeight;
+      list.style.overflow = "hidden";
+      var a = list.animate(
+        expanded
+          ? [{ height: h + "px", opacity: 1 }, { height: "0px", opacity: 0 }]
+          : [{ height: "0px", opacity: 0 }, { height: h + "px", opacity: 1 }],
+        { duration: expanded ? 220 : 300, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)" }
+      );
+      list._anim = a;
+      a.onfinish = function () {
+        list.style.overflow = "";
+        list._anim = null;
+        if (expanded) list.hidden = true;
+      };
     });
   });
+
+  /* Anything with class "reveal" fades and rises in as it scrolls into view,
+     and fades away again as it scrolls back out, in either direction. */
+  var io = null;
+  var watched = typeof WeakSet === "function" ? new WeakSet() : null;
+  function reveal() {
+    if (!document.documentElement.classList.contains("js-reveal") || !watched) return;
+    if (!io) {
+      io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var el = e.target;
+          if (e.isIntersecting) {
+            el.classList.add("in");
+          } else {
+            el.setAttribute("data-side", e.boundingClientRect.top < 0 ? "top" : "bottom");
+            el.classList.remove("in");
+          }
+        });
+      }, { rootMargin: "0px 0px -8% 0px", threshold: 0 });
+    }
+    document.querySelectorAll(".reveal").forEach(function (el) {
+      if (!watched.has(el)) { watched.add(el); io.observe(el); }
+    });
+  }
+  window.SITE.reveal = reveal;
+  reveal();
 })();

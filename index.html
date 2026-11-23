@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Instrument+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/site.css">
+<script>(function(d){try{if("IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("js-reveal");setTimeout(function(){if(!window.SITE)d.classList.remove("js-reveal")},3000)}}catch(e){}})(document.documentElement);</script>
 <style>
   /* Welcome: the name on faint graph paper fills the first screen; scrolling brings up the topic boxes. */
   .welcome {
@@ -175,20 +176,29 @@
   .card-go svg { width: 1rem; height: 1rem; transition: transform 0.2s ease; }
   .card:hover .card-go svg { transform: translateX(3px); }
 
-  /* Boxes rise into place as they scroll into view (only when scripts run) */
-  .js-reveal .reveal {
-    opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.2s ease, box-shadow 0.2s ease;
-    transition-delay: var(--delay, 0ms);
+  /* Cards keep their hover lift alongside the shared scroll fade */
+  .js-reveal .card.reveal {
+    transition:
+      opacity 0.55s ease var(--delay, 0s),
+      translate 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--delay, 0s),
+      transform 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
   }
-  .js-reveal .reveal.in { opacity: 1; transform: none; }
-  .js-reveal .card.reveal.in:hover { transform: translateY(-3px); transition-delay: 0ms; }
+
+  /* First-load entrance for the welcome text */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero > * { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+    .hero > :nth-child(2) { animation-delay: 0.08s; }
+    .hero > :nth-child(3) { animation-delay: 0.16s; }
+    .hero > :nth-child(4) { animation-delay: 0.24s; }
+    .cue { animation: rise 0.8s 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+    .cue svg { animation: nudge 2.2s 1.2s ease-in-out infinite; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .cue svg { animation: none; }
     .card, .card-go svg { transition: none; }
-    .js-reveal .reveal { opacity: 1; transform: none; transition: none; }
   }
 </style>
 </head>
@@ -216,7 +226,7 @@
         <span class="term"></span>
       </div>
     </div>
-    <div class="wrap">
+    <div class="wrap cue-wrap">
       <a class="cue" href="#study">
         <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 4v12M5 11l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Scroll to start studying
@@ -266,24 +276,29 @@
     cards.appendChild(card(SITE.root + l.href, SITE.ICONS[l.icon] || "", "Personal", l.title, l.meta, "Open"));
   });
 
-  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!("IntersectionObserver" in window) || reduce) return;
-  document.documentElement.classList.add("js-reveal");
-  var items = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
-  items.forEach(function (el, i) {
-    if (el.classList.contains("card")) el.style.setProperty("--delay", (i - 1) * 90 + "ms");
+  Array.prototype.forEach.call(cards.children, function (c, i) {
+    c.style.setProperty("--delay", i * 90 + "ms");
   });
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) {
-        var el = e.target;
-        el.classList.add("in");
-        io.unobserve(el);
-        setTimeout(function () { el.style.setProperty("--delay", "0ms"); }, 1400);
-      }
-    });
-  }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
-  items.forEach(function (el) { io.observe(el); });
+  SITE.reveal();
+
+  /* The welcome text drifts up and fades as you scroll down, and comes back as you scroll up */
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) return;
+  var hero = document.querySelector(".hero");
+  var cueWrap = document.querySelector(".cue-wrap");
+  var ticking = false;
+  function scrub() {
+    ticking = false;
+    var p = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.6)));
+    hero.style.opacity = String(1 - p * 0.85);
+    hero.style.translate = "0 " + (-p * 48).toFixed(1) + "px";
+    cueWrap.style.opacity = String(Math.max(0, 1 - p * 2.5));
+  }
+  window.addEventListener("scroll", function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(scrub); }
+  }, { passive: true });
+  window.addEventListener("resize", scrub);
+  scrub();
 })();
 </script>
 </body>

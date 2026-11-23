@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Instrument+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../assets/site.css">
+<script>(function(d){try{if("IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("js-reveal");setTimeout(function(){if(!window.SITE)d.classList.remove("js-reveal")},3000)}}catch(e){}})(document.documentElement);</script>
 <style>
   /* Notes: a list of notes beside a plain writing sheet. On phones the list and the sheet take turns. */
   .wrap.wide { max-width: 64rem; }
@@ -187,6 +188,16 @@
     .back { display: inline-flex; }
     .body-input { min-height: 55vh; }
   }
+
+  /* Smooth state changes */
+  .note-item { transition: border-color 0.2s ease, background-color 0.2s ease; }
+  .swap { animation: pop 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .toolbar-msg:not(:empty) { animation: pop 0.3s ease both; }
+  .btn.danger { transition: background-color 0.2s ease, color 0.2s ease; }
+  @media (prefers-reduced-motion: reduce) {
+    .swap, .toolbar-msg:not(:empty) { animation: none; }
+    .note-item, .btn.danger { transition: none; }
+  }
 </style>
 </head>
 <body data-page="notes">
@@ -208,7 +219,7 @@
   </div>
 
   <div class="wrap wide">
-    <div class="toolbar">
+    <div class="toolbar reveal">
       <button class="btn" id="new-note" type="button">
         <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         New note
@@ -219,7 +230,7 @@
       <span class="toolbar-msg" id="toolbar-msg" aria-live="polite"></span>
     </div>
 
-    <div class="notes" id="notes">
+    <div class="notes reveal" id="notes" style="--delay: 80ms">
       <div class="list-pane">
         <ul class="note-list" id="note-list" aria-label="Your notes"></ul>
         <p class="empty" id="empty">No notes yet. Tap New note to write your first one.</p>
@@ -346,8 +357,15 @@
     });
   }
 
+  function replay(el) {
+    el.classList.remove("swap");
+    void el.offsetWidth;
+    el.classList.add("swap");
+  }
+
   function open(id, enterEditing) {
     flush();
+    var switching = id !== currentId || enterEditing;
     currentId = id;
     var n = find(id);
     disarmDelete();
@@ -367,6 +385,7 @@
     statusEl.className = "save-status";
     datesEl.textContent = "Last edited " + fmtFull(n.updated);
     if (enterEditing) notesEl.classList.add("editing");
+    if (switching) replay(editor);
     renderList();
   }
 
@@ -413,6 +432,7 @@
   $("back").addEventListener("click", function () {
     flush();
     notesEl.classList.remove("editing");
+    replay(document.querySelector(".list-pane"));
     window.scrollTo(0, 0);
   });
 

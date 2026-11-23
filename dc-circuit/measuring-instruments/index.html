@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Instrument+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/site.css">
+<script>(function(d){try{if("IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("js-reveal");setTimeout(function(){if(!window.SITE)d.classList.remove("js-reveal")},3000)}}catch(e){}})(document.documentElement);</script>
 <style>
   /* Quiz page: sticky bar with the menu, score and controls; a short page heading; then each question drops down into a quiz card with its answer at the bottom. */
   .bar-left { display: flex; align-items: center; gap: 0.75rem; min-width: 0; }
@@ -306,6 +307,16 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .chev, .btn svg { transition: none; }
+  }
+
+  /* Smooth state changes */
+  .opt, .opt .letter, .seg button, .note-item, select { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; }
+  .result:not([hidden]), .answer:not([hidden]), .status:not([hidden]), .fix:not([hidden]) {
+    animation: pop 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .opt, .opt .letter, .seg button, select { transition: none; }
+    .result, .answer, .status, .fix { animation: none !important; }
   }
 </style>
 </head>
@@ -878,7 +889,7 @@ function answerFor(q) {
 }
 
 function renderQuestion(q) {
-  const d = el("details", "q");
+  const d = el("details", "q reveal");
   d.id = "q" + q.n;
 
   const s = el("summary");
@@ -968,7 +979,7 @@ function renderQuestion(q) {
 }
 
 function renderKey() {
-  const d = el("details", "q key");
+  const d = el("details", "q key reveal");
   d.id = "answer-key";
   const s = el("summary");
   s.appendChild(el("span", "num", "✓"));
@@ -1006,14 +1017,52 @@ list.appendChild(renderKey());
 const questionDetails = Array.from(list.querySelectorAll("details.q:not(.key)"));
 const toggleBtn = document.getElementById("toggle-all");
 const toggleLabel = document.getElementById("toggle-label");
+const REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const isOpen = d => d.open && !d._closing;
+
+/* Questions slide open and closed instead of jumping */
+function setOpen(d, wantOpen) {
+  if (wantOpen === isOpen(d)) return;
+  const body = d.querySelector(".body");
+  if (REDUCE || !body.animate) { d.open = wantOpen; return; }
+  const fromH = d.open ? body.getBoundingClientRect().height : 0;
+  const fromO = d.open ? Number(getComputedStyle(body).opacity) : 0;
+  if (d._anim) { d._anim.cancel(); d._anim = null; }
+  d.open = true;
+  const fullH = body.offsetHeight;
+  const pb = getComputedStyle(body).paddingBottom;
+  const toH = wantOpen ? fullH : 0;
+  d._closing = !wantOpen;
+  body.style.overflow = "hidden";
+  const a = body.animate([
+    { height: fromH + "px", paddingBottom: fromH > 0 ? pb : "0px", opacity: fromO },
+    { height: toH + "px", paddingBottom: wantOpen ? pb : "0px", opacity: wantOpen ? 1 : 0 }
+  ], { duration: Math.min(480, 200 + Math.abs(toH - fromH) * 0.25), easing: "cubic-bezier(0.2, 0.7, 0.2, 1)" });
+  d._anim = a;
+  a.onfinish = () => {
+    if (d._anim !== a) return;
+    d._anim = null;
+    body.style.overflow = "";
+    if (d._closing) { d._closing = false; d.open = false; }
+  };
+}
+list.addEventListener("click", e => {
+  const s = e.target.closest("summary");
+  if (!s || !list.contains(s)) return;
+  e.preventDefault();
+  const d = s.parentElement;
+  setOpen(d, !isOpen(d));
+  refreshToggle();
+});
+
 function refreshToggle() {
-  const allOpen = questionDetails.every(d => d.open);
+  const allOpen = questionDetails.every(isOpen);
   toggleLabel.textContent = allOpen ? "Close all" : "Open all";
   toggleBtn.setAttribute("aria-pressed", String(allOpen));
 }
 toggleBtn.addEventListener("click", () => {
-  const openAll = questionDetails.some(d => !d.open);
-  questionDetails.forEach(d => { d.open = openAll; });
+  const openAll = questionDetails.some(d => !isOpen(d));
+  questionDetails.forEach(d => setOpen(d, openAll));
   refreshToggle();
 });
 questionDetails.forEach(d => d.addEventListener("toggle", refreshToggle));
