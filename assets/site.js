@@ -137,29 +137,47 @@
     });
   });
 
-  /* Anything with class "reveal" fades and rises in as it scrolls into view,
-     and fades away again as it scrolls back out, in either direction. */
-  var io = null;
-  var watched = typeof WeakSet === "function" ? new WeakSet() : null;
-  function reveal() {
-    if (!document.documentElement.classList.contains("js-reveal") || !watched) return;
-    if (!io) {
-      io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          var el = e.target;
-          if (e.isIntersecting) {
-            el.classList.add("in");
-          } else {
-            el.setAttribute("data-side", e.boundingClientRect.top < 0 ? "top" : "bottom");
-            el.classList.remove("in");
-          }
-        });
-      }, { rootMargin: "0px 0px -8% 0px", threshold: 0 });
+  /* Anything with class "reveal" fades and rises in as you scroll it up into view,
+     and sinks and fades away as you scroll back up, in step with the scrolling.
+     data-fade-zone: how much of the screen height the fade takes (default 0.35).
+     data-fade-lag: extra pixels before it starts, to stagger boxes side by side. */
+  var fading = [];
+  var ticking = false;
+  function update() {
+    ticking = false;
+    var vh = window.innerHeight;
+    var remaining = Math.max(0, document.documentElement.scrollHeight - (window.scrollY + vh));
+    for (var i = 0; i < fading.length; i++) {
+      var el = fading[i];
+      if (!el.isConnected) continue;
+      var top = el.getBoundingClientRect().top - (el._ty || 0);
+      var zone = (parseFloat(el.getAttribute("data-fade-zone")) || 0.35) * vh;
+      var lag = parseFloat(el.getAttribute("data-fade-lag")) || 0;
+      /* Near the end of the page, finish the fade by the time you reach the bottom */
+      var room = vh - (top - remaining) - lag;
+      if (room > 0 && room < zone) zone = room;
+      var p = (vh - top - lag) / zone;
+      p = p < 0 ? 0 : p > 1 ? 1 : p;
+      var e = p * p * (3 - 2 * p);
+      var ty = (1 - e) * 44;
+      el._ty = ty;
+      el.style.opacity = e.toFixed(3);
+      el.style.translate = "0 " + ty.toFixed(1) + "px";
     }
-    document.querySelectorAll(".reveal").forEach(function (el) {
-      if (!watched.has(el)) { watched.add(el); io.observe(el); }
-    });
   }
+  function schedule() {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }
+  function reveal() {
+    if (!document.documentElement.classList.contains("js-reveal")) return;
+    document.querySelectorAll(".reveal").forEach(function (el) {
+      if (fading.indexOf(el) === -1) fading.push(el);
+    });
+    update();
+  }
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", schedule);
+  if ("ResizeObserver" in window) new ResizeObserver(schedule).observe(document.body);
   window.SITE.reveal = reveal;
   reveal();
 })();

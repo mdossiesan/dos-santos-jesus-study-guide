@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Instrument+Sans:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="../assets/site.css?v=4">
 <script>(function(d){try{if("IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("js-reveal");setTimeout(function(){if(!window.SITE)d.classList.remove("js-reveal")},3000)}}catch(e){}})(document.documentElement);</script>
 <style>
   /* Notes: a list of notes beside a plain writing sheet. On phones the list and the sheet take turns. */
@@ -230,7 +230,7 @@
       <span class="toolbar-msg" id="toolbar-msg" aria-live="polite"></span>
     </div>
 
-    <div class="notes reveal" id="notes" style="--delay: 80ms">
+    <div class="notes reveal" id="notes" data-fade-zone="0.12">
       <div class="list-pane">
         <ul class="note-list" id="note-list" aria-label="Your notes"></ul>
         <p class="empty" id="empty">No notes yet. Tap New note to write your first one.</p>
@@ -257,7 +257,7 @@
   </div>
 </main>
 
-<script src="../assets/site.js" data-root="../"></script>
+<script src="../assets/site.js?v=4" data-root="../"></script>
 <script>
 (function () {
   var KEY = "dsj-study-notes-v1";
