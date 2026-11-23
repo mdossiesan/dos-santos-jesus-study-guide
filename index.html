@@ -12,6 +12,16 @@
 <script>(function(d){try{if("IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("js-reveal");setTimeout(function(){if(!window.SITE)d.classList.remove("js-reveal")},3000)}}catch(e){}})(document.documentElement);</script>
 <style>
   /* Welcome: the name on faint graph paper fills the first screen; scrolling brings up the topic boxes. */
+  /* Small name in the top bar */
+  .brand {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1.1;
+    letter-spacing: 0.005em;
+    color: var(--fg);
+  }
+
   .welcome {
     position: relative;
     min-height: calc(100vh - 4.75rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
@@ -49,8 +59,8 @@
     margin: 0;
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(3.5rem, 13vw, 8rem);
-    line-height: 0.9;
+    font-size: clamp(3.25rem, 12vw, 7rem);
+    line-height: 0.92;
     letter-spacing: -0.02em;
     text-wrap: balance;
   }
@@ -199,6 +209,7 @@
     <button class="menu-btn" type="button" data-menu-open aria-controls="site-menu" aria-expanded="false" aria-label="Open menu">
       <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 5.5h14M3 10h14M3 14.5h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
     </button>
+    <span class="brand">Dos Santos Jesus</span>
   </div>
 </header>
 
@@ -206,7 +217,7 @@
   <section class="welcome">
     <div class="wrap hero">
       <p class="eyebrow">Welcome to the</p>
-      <h1>Dos Santos Jesus</h1>
+      <h1>Electronics Overview</h1>
       <p class="sub">Study Guide</p>
       <div class="trace" aria-hidden="true">
         <span class="term"></span>
