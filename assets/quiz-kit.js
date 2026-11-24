@@ -1,7 +1,7 @@
 /* Shared quiz parts: builds each kind of question (multiple choice, true/false, ordering, matching, blanks),
    marks answers, and makes the answer box. Used by the study guide and the one-at-a-time quiz. */
 (function () {
-  const KIND = { mc: "Multiple choice", tf: "True or false", order: "Put in order", match: "Matching", fill: "Fill in the blanks" };
+  const KIND = { mc: "Multiple choice", tf: "True or false", order: "Put in order", match: "Matching", fill: "Fill in the blanks", calc: "Calculation", recall: "Self-check" };
   const LETTERS = "abcdefghij";
   const WORDS = { 2: "two", 3: "three", 4: "four", 5: "five" };
 
@@ -253,45 +253,66 @@
 
   /* Matching: a dropdown for each task */
   function buildMatch(q, api) {
-    const choices = [...new Set(q.rows.map(r => r[1]))].sort((a, b) => a.localeCompare(b));
-    const list = el("div", "mlist");
-    const rows = q.rows.map(([task, ans], i) => {
+    const cols = q.cols || [null];
+    const choices = cols.map((_, c) => [...new Set(q.rows.map(r => r[c + 1]))].sort((a, b) => a.localeCompare(b)));
+    const list = el("div", "mlist" + (cols.length > 1 ? " multi" : ""));
+    list.style.setProperty("--cols", String(cols.length));
+    if (cols.length > 1) {
+      const head = el("div", "mrow mhead");
+      head.setAttribute("aria-hidden", "true");
+      head.appendChild(el("span", null, q.rowHeader || ""));
+      cols.forEach(h => head.appendChild(el("span", null, h)));
+      list.appendChild(head);
+    }
+    const rows = q.rows.map((r, i) => {
       const row = el("div", "mrow");
-      const sel = el("select");
-      sel.id = `q${q.n}-row${i}`;
-      const lab = el("label", null, task);
-      lab.htmlFor = sel.id;
-      const ph = el("option", null, "Choose equipment…");
-      ph.value = "";
-      sel.appendChild(ph);
-      choices.forEach(c => { const o = el("option", null, c); o.value = c; sel.appendChild(o); });
-      sel.addEventListener("change", () => api.changed());
+      const lab = el("label", "mlabel", r[0]);
+      row.appendChild(lab);
+      const sels = cols.map((h, c) => {
+        const sel = el("select");
+        sel.id = `q${q.n}-row${i}` + (c ? `-${c}` : "");
+        if (c === 0) lab.htmlFor = sel.id;
+        if (h) sel.setAttribute("aria-label", `${h} for ${r[0]}`);
+        const ph = el("option", null, h ? `Choose ${h.toLowerCase()}…` : (q.placeholder || "Choose…"));
+        ph.value = "";
+        sel.appendChild(ph);
+        choices[c].forEach(v => { const o = el("option", null, v); o.value = v; sel.appendChild(o); });
+        sel.addEventListener("change", () => api.changed());
+        row.appendChild(sel);
+        return sel;
+      });
       const fix = el("span", "fix");
       fix.hidden = true;
-      row.append(lab, sel, fix);
+      row.appendChild(fix);
       list.appendChild(row);
-      return { row, sel, fix, ans };
+      return { row, sels, fix, ans: r.slice(1) };
     });
+    const total = rows.length * cols.length;
+    const chosen = () => rows.reduce((n, r) => n + r.sels.filter(s => s.value).length, 0);
+    const rightCount = () => rows.reduce((n, r) => n + r.sels.filter((s, c) => s.value === r.ans[c]).length, 0);
     return {
       node: list,
-      hint: "Choose the test equipment for each task, then check your answers.",
-      progress: () => `${rows.filter(r => r.sel.value).length} of ${rows.length} chosen`,
-      complete: () => rows.every(r => r.sel.value),
+      hint: q.hint || "Choose a match for each row, then check your answers.",
+      progress: () => `${chosen()} of ${total} chosen`,
+      complete: () => chosen() === total,
       grade: () => {
-        const n = rows.filter(r => r.sel.value === r.ans).length;
-        return { right: n === rows.length, detail: `${n} of ${rows.length} right.` };
+        const n = rightCount();
+        return { right: n === total, detail: `${n} of ${total} right.` };
       },
       reveal: () => rows.forEach(r => {
-        const ok = r.sel.value === r.ans;
-        r.sel.disabled = true;
-        if (r.sel.value) r.row.classList.add(ok ? "correct" : "wrong");
+        const allOk = r.sels.every((s, c) => s.value === r.ans[c]);
+        const any = r.sels.some(s => s.value);
+        r.sels.forEach((s, c) => {
+          s.disabled = true;
+          if (s.value) s.classList.add(s.value === r.ans[c] ? "ok" : "no");
+        });
+        if (any) r.row.classList.add(allOk ? "correct" : "wrong");
         r.fix.hidden = false;
-        r.fix.textContent = ok ? "✓ Correct" : (r.sel.value ? "✗ Answer: " : "Answer: ") + r.ans;
-        r.fix.className = "fix " + (ok || !r.sel.value ? "ok" : "no");
+        r.fix.textContent = allOk ? "✓ Correct" : (any ? "✗ Answer: " : "Answer: ") + r.ans.join(" · ");
+        r.fix.className = "fix " + (allOk || !any ? "ok" : "no");
       }),
       reset: () => rows.forEach(r => {
-        r.sel.disabled = false;
-        r.sel.value = "";
+        r.sels.forEach(s => { s.disabled = false; s.value = ""; s.classList.remove("ok", "no"); });
         r.row.classList.remove("correct", "wrong");
         r.fix.hidden = true;
         r.fix.textContent = "";
@@ -299,64 +320,208 @@
     };
   }
 
-  /* Fill in the blanks */
+  /* Fill in the blanks: buttons for short choices, a dropdown for longer lists */
   function buildFill(q, api) {
     const picks = q.blanks.map(() => null);
     const wrap = el("div", "blanks");
     const ui = q.blanks.map((bl, i) => {
       const row = el("div", "blank");
-      row.appendChild(el("span", "lbl", `Blank ${i + 1}`));
+      const lbl = el("span", "lbl", `Blank ${i + 1}`);
+      lbl.id = `q${q.n}-blank${i}`;
+      row.appendChild(lbl);
+      const mark = el("span", "mark");
+      const fix = el("span", "bfix");
+      fix.hidden = true;
+      if (bl.choices.length > 3 || bl.choices.some(c => c.length > 14)) {
+        const sel = el("select", "bsel");
+        sel.id = `q${q.n}-b${i}`;
+        sel.setAttribute("aria-labelledby", lbl.id);
+        const ph = el("option", null, "Choose…");
+        ph.value = "";
+        sel.appendChild(ph);
+        bl.choices.forEach((c, k) => { const o = el("option", null, c); o.value = String(k); sel.appendChild(o); });
+        sel.addEventListener("change", () => {
+          if (api.locked) return;
+          picks[i] = sel.value === "" ? null : Number(sel.value);
+          api.changed();
+        });
+        row.append(sel, mark, fix);
+        wrap.appendChild(row);
+        return { sel, mark, fix };
+      }
       const s = seg(bl.choices, k => {
         if (api.locked) return;
         picks[i] = k;
         paint(i);
         api.changed();
       });
-      const mark = el("span", "mark");
       row.append(s.wrap, mark);
       wrap.appendChild(row);
-      return { s, mark };
+      return { s, mark, fix };
     });
     function paint(i) {
+      if (!ui[i].s) return;
       ui[i].s.btns.forEach((b, k) => {
         const on = picks[i] === k;
         b.classList.toggle("picked", on);
         b.setAttribute("aria-pressed", String(on));
       });
     }
+    const isRight = (bl, i) => picks[i] !== null && bl.choices[picks[i]] === bl.answer;
     return {
       node: wrap,
       hint: "Choose a word for each blank, then check your answer.",
       progress: () => `${picks.filter(v => v !== null).length} of ${picks.length} filled`,
       complete: () => picks.every(v => v !== null),
       grade: () => {
-        const n = q.blanks.filter((bl, i) => bl.choices[picks[i]] === bl.answer).length;
+        const n = q.blanks.filter(isRight).length;
         return { right: n === q.blanks.length, detail: `${n} of ${q.blanks.length} right.` };
       },
       reveal: () => {
         wrap.classList.add("locked");
         q.blanks.forEach((bl, i) => {
-          ui[i].s.btns.forEach((b, k) => {
-            b.classList.remove("picked");
-            if (bl.choices[k] === bl.answer) b.classList.add("correct");
-            else if (picks[i] === k) b.classList.add("wrong");
-          });
-          if (picks[i] !== null) setMark(ui[i].mark, bl.choices[picks[i]] === bl.answer);
+          const u = ui[i];
+          const ok = isRight(bl, i);
+          if (u.sel) {
+            u.sel.disabled = true;
+            if (picks[i] !== null) u.sel.classList.add(ok ? "ok" : "no");
+            if (!ok) { u.fix.hidden = false; u.fix.textContent = "Answer: " + bl.answer; }
+          } else {
+            u.s.btns.forEach((b, k) => {
+              b.classList.remove("picked");
+              if (bl.choices[k] === bl.answer) b.classList.add("correct");
+              else if (picks[i] === k) b.classList.add("wrong");
+            });
+          }
+          if (picks[i] !== null) setMark(u.mark, ok);
         });
       },
       reset: () => {
         wrap.classList.remove("locked");
         picks.fill(null);
-        ui.forEach(({ s, mark }, i) => {
-          s.btns.forEach(b => b.classList.remove("correct", "wrong"));
-          clearMark(mark);
-          paint(i);
+        ui.forEach((u, i) => {
+          if (u.sel) {
+            u.sel.disabled = false;
+            u.sel.value = "";
+            u.sel.classList.remove("ok", "no");
+          } else {
+            u.s.btns.forEach(b => b.classList.remove("correct", "wrong"));
+            paint(i);
+          }
+          u.fix.hidden = true;
+          u.fix.textContent = "";
+          clearMark(u.mark);
         });
       }
     };
   }
 
-  const BUILDERS = { mc: buildMC, tf: buildTF, order: buildOrder, match: buildMatch, fill: buildFill };
+  /* Calculation: type a value for each field; within the tolerance (default 2%) counts as right */
+  function buildCalc(q, api) {
+    const tol = q.tolerance || 0.02;
+    const wrap = el("div", "calc");
+    const num = v => {
+      const t = String(v).trim().replace(/\s+/g, "").replace(",", ".");
+      if (!/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?/i.test(t)) return null;
+      const n = parseFloat(t);
+      return isFinite(n) ? n : null;
+    };
+    const near = (v, a) => v !== null && Math.abs(v - a) <= Math.max(Math.abs(a) * tol, 1e-9);
+    const ui = q.fields.map((f, i) => {
+      const box = el("div", "cfield");
+      const id = `q${q.n}-c${i}`;
+      const name = el("label", "cname", f.label);
+      name.htmlFor = id;
+      const line = el("div", "cline");
+      const inp = el("input");
+      inp.type = "text";
+      inp.id = id;
+      inp.inputMode = "decimal";
+      inp.autocomplete = "off";
+      inp.spellcheck = false;
+      inp.setAttribute("aria-label", `${f.label} in ${f.unit}`);
+      inp.addEventListener("input", () => api.changed());
+      inp.addEventListener("keydown", e => { if (e.key === "Enter") api.check(); });
+      line.append(inp, el("span", "cunit", f.unit));
+      const fix = el("span", "cfix");
+      fix.hidden = true;
+      box.append(name, line, fix);
+      wrap.appendChild(box);
+      return { f, box, inp, fix };
+    });
+    return {
+      node: wrap,
+      hint: `Work out each value in the unit shown, then check. Answers within ${Math.round(tol * 100)}% count as right.`,
+      progress: () => `${ui.filter(u => num(u.inp.value) !== null).length} of ${ui.length} filled`,
+      complete: () => ui.every(u => num(u.inp.value) !== null),
+      grade: () => {
+        const n = ui.filter(u => near(num(u.inp.value), u.f.answer)).length;
+        return { right: n === ui.length, detail: `${n} of ${ui.length} right.` };
+      },
+      reveal: () => ui.forEach(u => {
+        const v = num(u.inp.value);
+        const ok = near(v, u.f.answer);
+        u.inp.readOnly = true;
+        if (v !== null) u.box.classList.add(ok ? "correct" : "wrong");
+        u.fix.hidden = false;
+        u.fix.textContent = ok ? "✓ Correct" : (v !== null ? "✗ " : "") + `${u.f.answer} ${u.f.unit}`;
+        u.fix.className = "cfix " + (ok || v === null ? "ok" : "no");
+      }),
+      reset: () => ui.forEach(u => {
+        u.inp.readOnly = false;
+        u.inp.value = "";
+        u.box.classList.remove("correct", "wrong");
+        u.fix.hidden = true;
+        u.fix.textContent = "";
+      })
+    };
+  }
+
+  /* Self-check: for questions that need a picture or a written answer. Reveal the answer, then mark yourself. */
+  function buildRecall(q, api) {
+    let marked = null;
+    const wrap = el("div", "recall");
+    const revealBtn = button("btn small ghost", "Reveal answer");
+    const box = answerBox("Answer", q.answer);
+    box.hidden = true;
+    const markRow = el("div", "actions");
+    markRow.hidden = true;
+    const yes = button("btn small", "I got it right");
+    const no = button("btn small ghost", "I got it wrong");
+    markRow.append(yes, no);
+    wrap.append(revealBtn, box, markRow);
+    revealBtn.addEventListener("click", () => {
+      if (api.locked) return;
+      revealBtn.hidden = true;
+      box.hidden = false;
+      markRow.hidden = false;
+      yes.focus({ preventScroll: true });
+    });
+    yes.addEventListener("click", () => { marked = true; api.check(); });
+    no.addEventListener("click", () => { marked = false; api.check(); });
+    return {
+      node: wrap,
+      auto: true,
+      ownsAnswer: true,
+      hint: "Work it out on paper or in your head, then reveal the answer and mark yourself.",
+      progress: () => "",
+      complete: () => marked !== null,
+      grade: () => ({ right: marked === true, detail: "" }),
+      reveal: () => {
+        revealBtn.hidden = true;
+        box.hidden = false;
+        markRow.hidden = true;
+      },
+      reset: () => {
+        marked = null;
+        revealBtn.hidden = false;
+        box.hidden = true;
+        markRow.hidden = true;
+      }
+    };
+  }
+
+  const BUILDERS = { mc: buildMC, tf: buildTF, order: buildOrder, match: buildMatch, fill: buildFill, calc: buildCalc, recall: buildRecall };
 
   function answerFor(q) {
     if (q.type === "order") {

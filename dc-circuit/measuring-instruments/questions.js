@@ -27,6 +27,8 @@ window.QUIZ_QUESTIONS = [
     key: "c, d, e." },
 
   { n: 4, type: "match", title: "Match the test equipment to the task it is used for",
+    placeholder: "Choose equipment…",
+    hint: "Choose the test equipment for each task, then check your answers.",
     rows: [
       ["Simple, easy to use, with contact required for testing for a live circuit", "Neon Tester"],
       ["Meter incorporating voltage, current and resistance measurement functions", "Digital / Analog Multimeter"],

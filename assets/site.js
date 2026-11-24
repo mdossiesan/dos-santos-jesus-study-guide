@@ -8,14 +8,16 @@
         {
           id: "measuring-instruments",
           title: "DC Study Guide",
-          meta: "Revision quiz · 22 questions",
-          href: "dc-circuit/measuring-instruments/"
+          meta: "22 questions",
+          href: "dc-circuit/measuring-instruments/",
+          quiz: { id: "dc-quiz", href: "dc-circuit/measuring-instruments/quiz/" }
         },
         {
-          id: "dc-quiz",
-          title: "DC Quiz",
-          meta: "One question at a time · random order",
-          href: "dc-circuit/measuring-instruments/quiz/"
+          id: "electrical-fundamentals",
+          title: "Electrical Fundamentals",
+          meta: "58 questions",
+          href: "dc-circuit/electrical-fundamentals/",
+          quiz: { id: "ef-quiz", href: "dc-circuit/electrical-fundamentals/quiz/" }
         }
       ]
     }
@@ -33,6 +35,7 @@
     close: '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
     home: '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 9.5L10 4l6.5 5.5V16a1 1 0 0 1-1 1h-3.5v-4.5h-4V17H4.5a1 1 0 0 1-1-1V9.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>',
     note: '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M13.5 3.5l3 3L8 15H5v-3l8.5-8.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M11.5 5.5l3 3" stroke="currentColor" stroke-width="1.6"/></svg>',
+    shuffle: '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 6h3.5c2 0 3 1 4 3s2 3 4 3H17M3 14h3.5c1.3 0 2.2-.5 2.9-1.3M17 6h-2.5c-1.3 0-2.2.5-2.9 1.3M15 4l2 2-2 2M15 10l2 2-2 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     chev: '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
   };
   window.SITE.ICONS = ICONS;
@@ -71,7 +74,11 @@
         '<li><a class="nav-link" href="' + root + it.href + '"' + cur(it.id) + ">" +
           '<span class="t">' + esc(it.title) + "</span>" +
           '<span class="m">' + esc(it.meta) + "</span>" +
-        "</a></li>";
+        "</a>";
+      if (it.quiz) {
+        html += '<a class="nav-sub" href="' + root + it.quiz.href + '"' + cur(it.quiz.id) + ">" + ICONS.shuffle + "Random quiz</a>";
+      }
+      html += "</li>";
     });
     html += "</ul></div>";
   });
