@@ -230,6 +230,9 @@ body::before {
   border-bottom: 1px solid var(--rule);
 }
 .drawer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.375rem;
@@ -353,3 +356,21 @@ body::before {
   @view-transition { navigation: none; }
   .reveal { opacity: 1 !important; translate: none !important; }
 }
+
+/* VN badge beside the name */
+.vn-mark {
+  flex-shrink: 0;
+  width: 2.375rem;
+  height: 2.375rem;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+.vn-mark.on-dark { background: #ffffff; color: #0a1028; }
