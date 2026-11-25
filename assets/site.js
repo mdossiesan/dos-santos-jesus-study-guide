@@ -50,7 +50,7 @@
   var homeHref = root || "./";
   var html =
     '<div class="drawer-head">' +
-      '<a class="drawer-brand" href="' + homeHref + '"><span class="vn-mark" aria-hidden="true">VN</span>Vikrant Nehru</a>' +
+      '<a class="drawer-brand" href="' + homeHref + '">Dos Santos Jesus</a>' +
       '<button class="close-btn" type="button" aria-label="Close menu">' + ICONS.close + "</button>" +
     "</div>" +
     '<nav class="nav" aria-label="Topics">' +
