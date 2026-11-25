@@ -4,134 +4,118 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dos Santos Jesus Study Guide</title>
-<meta name="description" content="Welcome to the Dos Santos Jesus Study Guide.">
+<meta name="description" content="Welcome to the Electronics Overview study guide: DC circuit study guides, random quizzes and personal notes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Instrument+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/site.css?v=8">
 <script>(function(d){try{if("IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("js-reveal");setTimeout(function(){if(!window.SITE)d.classList.remove("js-reveal")},3000)}}catch(e){}})(document.documentElement);</script>
 <style>
-  /* Welcome: the name on faint graph paper fills the first screen; scrolling brings up the topic boxes. */
-  /* Small name in the top bar */
-  .brand {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.25rem;
-    line-height: 1.1;
-    letter-spacing: 0.005em;
-    color: var(--fg);
+  /* Home: white header with the name and links, a dark hero with a drawn circuit-board pattern,
+     the topic boxes, a three-feature row, and a dark footer. The hero and footer stay dark in both themes. */
+  :root {
+    --hero-1: #0a1028;
+    --hero-2: #1c3478;
+    --hero-text: #ffffff;
+    --hero-soft: rgba(255, 255, 255, 0.78);
+    --hero-accent: #b9c9f6;
+    --hero-line: rgba(255, 255, 255, 0.45);
   }
 
-  .welcome {
-    position: relative;
-    min-height: calc(100vh - 4.75rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  /* Header */
+  .site-head { background: var(--surface); border-bottom: 1px solid var(--rule); }
+  .head-row { display: flex; align-items: center; gap: 0.875rem; padding-block: 0.75rem; }
+  .brand { display: flex; flex-direction: column; gap: 0.125rem; color: var(--fg); text-decoration: none; line-height: 1.1; min-width: 0; }
+  .brand-name { font-family: var(--font-display); font-weight: 600; font-size: 1.375rem; }
+  .brand-tag { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .brand:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  .head-nav { margin-left: auto; display: flex; align-items: center; gap: 0.25rem; }
+  .head-nav a {
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    color: var(--fg);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
   }
-  @supports (min-height: 100dvh) {
-    .welcome { min-height: calc(100dvh - 4.75rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); }
-  }
-  .welcome::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(var(--grid) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size: 28px 28px;
-    background-position: center;
-    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 40% 50%, #000 30%, transparent 75%);
-    mask-image: radial-gradient(ellipse 70% 60% at 40% 50%, #000 30%, transparent 75%);
-    pointer-events: none;
-  }
+  .head-nav a:hover { background: var(--accent-soft); color: var(--accent); }
+  .head-nav a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Hero */
   .hero {
     position: relative;
-    flex: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    min-height: clamp(30rem, 78vh, 44rem);
+    color: var(--hero-text);
+    background:
+      radial-gradient(60rem 30rem at 85% 20%, rgba(120, 150, 240, 0.28), transparent 60%),
+      linear-gradient(135deg, var(--hero-1) 0%, var(--hero-2) 100%);
+  }
+  .hero-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-mask-image: linear-gradient(100deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.55) 45%, #000 80%);
+    mask-image: linear-gradient(100deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.55) 45%, #000 80%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative;
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: clamp(1rem, 2.5vw, 1.5rem);
-    padding-block: 2rem;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-block: clamp(3.5rem, 9vw, 5.5rem);
   }
+  .hero .eyebrow { color: var(--hero-accent); }
   .hero h1 {
     margin: 0;
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(3.25rem, 12vw, 7rem);
+    font-size: clamp(3.25rem, 11vw, 6.75rem);
     line-height: 0.92;
     letter-spacing: -0.02em;
     text-wrap: balance;
+    max-width: 12ch;
   }
-  .hero .sub {
+  .hero-sub {
     margin: 0;
     font-family: var(--font-display);
     font-weight: 500;
     font-size: clamp(1.5rem, 4.5vw, 2.25rem);
     line-height: 1.1;
-    color: var(--muted);
+    color: var(--hero-soft);
   }
+  .hero-lede { margin: 0.25rem 0 0; max-width: 34rem; color: var(--hero-soft); font-size: 1.0625rem; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; padding-top: 0.75rem; }
+  .btn-light { background: #ffffff; color: #0a1028; }
+  .btn-light:hover { filter: none; background: #e8edf7; }
+  .btn-outline { background: transparent; color: #ffffff; box-shadow: inset 0 0 0 1px var(--hero-line); }
+  .btn-outline:hover { filter: none; background: rgba(255, 255, 255, 0.1); }
+  .hero .btn:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
+  .btn svg { width: 1rem; height: 1rem; }
 
-  /* Resistor symbol between two terminals */
-  .trace {
-    display: flex;
-    align-items: center;
-    max-width: 34rem;
-    margin-top: 0.5rem;
-    color: var(--accent);
-  }
-  .trace .term {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    border: 1.5px solid currentColor;
-    background: var(--bg);
-    flex-shrink: 0;
-  }
-  .trace .wire { flex: 1; height: 1.5px; background: var(--rule); }
-  .trace svg { width: 6.5rem; height: 1.25rem; flex-shrink: 0; }
-
-  .welcome > .wrap { width: 100%; }
-  .cue {
-    position: relative;
-    align-self: flex-start;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    padding: 0.5rem 0;
-    color: var(--muted);
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-decoration: none;
-  }
-  .cue svg { width: 1.125rem; height: 1.125rem; color: var(--accent); animation: nudge 2.2s ease-in-out infinite; }
-  .cue:hover { color: var(--fg); }
-  .cue:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
-  @keyframes nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
-
-  /* What do you want to study? */
-  .study {
-    padding-block: clamp(3.5rem, 10vw, 6rem) clamp(4rem, 10vw, 7rem);
-    border-top: 1px solid var(--rule);
-    scroll-margin-top: env(safe-area-inset-top, 0px);
-  }
-  .study .wrap { display: flex; flex-direction: column; gap: 2rem; }
-  .study h2 {
+  /* Section headings */
+  .section-head { display: flex; flex-direction: column; gap: 0.5rem; max-width: 40rem; margin-bottom: 2rem; }
+  .section-head h2 {
     margin: 0;
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(2.25rem, 7vw, 3.5rem);
+    font-size: clamp(2.25rem, 6.5vw, 3.25rem);
     line-height: 1.05;
     letter-spacing: -0.01em;
     text-wrap: balance;
   }
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: 1rem;
-  }
+  .section-lede { margin: 0; color: var(--muted); }
+
+  /* What do you want to study? */
+  .study { padding-block: clamp(3.5rem, 9vw, 6rem); scroll-margin-top: env(safe-area-inset-top, 0px); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }
   .card {
     position: relative;
     display: flex;
@@ -147,7 +131,7 @@
     transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
   }
   .card:hover { border-color: var(--accent); box-shadow: var(--lift); transform: translateY(-3px); }
-  .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  a.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   .card-icon {
     width: 2.5rem;
     height: 2.5rem;
@@ -159,19 +143,8 @@
     color: var(--accent);
   }
   .card-icon svg { width: 1.375rem; height: 1.375rem; }
-  .card-kicker {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-  .card-title {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.75rem;
-    line-height: 1.1;
-  }
+  .card-kicker { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+  .card-title { font-family: var(--font-display); font-weight: 600; font-size: 1.75rem; line-height: 1.1; }
   .card-meta { font-size: 0.875rem; color: var(--muted); }
   .card-go {
     margin-top: auto;
@@ -185,73 +158,169 @@
   }
   .card-go svg { width: 1rem; height: 1rem; transition: transform 0.2s ease; }
   .card:hover .card-go svg { transform: translateX(3px); }
-  .card-actions {
-    margin-top: auto;
-    padding-top: 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
-  }
+  .card-actions { margin-top: auto; padding-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
   .card-actions .card-go { margin-top: 0; padding-top: 0; text-decoration: none; }
   .card-actions .card-go:hover { text-decoration: underline; text-underline-offset: 3px; }
   .card-actions .card-go:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 
-  /* First-load entrance for the welcome text */
-  @media (prefers-reduced-motion: no-preference) {
-    .hero > * { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-    .hero > :nth-child(2) { animation-delay: 0.08s; }
-    .hero > :nth-child(3) { animation-delay: 0.16s; }
-    .hero > :nth-child(4) { animation-delay: 0.24s; }
-    .cue { animation: rise 0.8s 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-    .cue svg { animation: nudge 2.2s 1.2s ease-in-out infinite; }
+  /* Three ways to study */
+  .how { padding-block: clamp(3.5rem, 9vw, 6rem); background: var(--surface); border-block: 1px solid var(--rule); }
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 2rem 1.5rem; }
+  .feature { display: flex; flex-direction: column; gap: 0.625rem; }
+  .f-icon {
+    width: 3.25rem;
+    height: 3.25rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .f-icon svg { width: 1.5rem; height: 1.5rem; }
+  .feature h3 { margin: 0.25rem 0 0; font-size: 1.125rem; font-weight: 600; }
+  .feature p { margin: 0; color: var(--muted); font-size: 0.9375rem; max-width: 36ch; }
+
+  /* Footer */
+  .site-foot { background: var(--hero-1); color: var(--hero-soft); }
+  .foot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 2rem;
+    padding-block: 3rem 2rem;
+  }
+  .foot-brand { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 1.5rem; color: var(--hero-text); }
+  .foot-tag { margin: 0.25rem 0 0; font-size: 0.875rem; }
+  .site-foot h3 {
+    margin: 0 0 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hero-accent);
+  }
+  .site-foot ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+  .site-foot a { color: var(--hero-text); text-decoration: none; font-size: 0.9375rem; }
+  .site-foot a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .site-foot a:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; border-radius: 2px; }
+  .foot-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding-block: 1.25rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 0.8125rem;
   }
 
+  @media (max-width: 760px) {
+    .head-nav { display: none; }
+    .hero-art { opacity: 0.6; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-inner > * { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+    .hero-inner > :nth-child(2) { animation-delay: 0.08s; }
+    .hero-inner > :nth-child(3) { animation-delay: 0.16s; }
+    .hero-inner > :nth-child(4) { animation-delay: 0.24s; }
+    .hero-inner > :nth-child(5) { animation-delay: 0.32s; }
+    .hero-art { animation: art-in 1.4s ease both; }
+    @keyframes art-in { from { opacity: 0; } }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .cue svg { animation: none; }
     .card, .card-go svg { transition: none; }
   }
 </style>
 </head>
 <body data-page="home">
 
-<header class="topbar">
-  <div class="wrap">
+<header class="site-head">
+  <div class="wrap head-row">
     <button class="menu-btn" type="button" data-menu-open aria-controls="site-menu" aria-expanded="false" aria-label="Open menu">
       <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 5.5h14M3 10h14M3 14.5h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
     </button>
-    <span class="brand">Dos Santos Jesus</span>
+    <a class="brand" href="./">
+      <span class="brand-name">Dos Santos Jesus</span>
+      <span class="brand-tag">Electronics study guide</span>
+    </a>
+    <nav class="head-nav" id="head-nav" aria-label="Main"></nav>
   </div>
 </header>
 
 <main>
-  <section class="welcome">
-    <div class="wrap hero">
+  <section class="hero" aria-labelledby="hero-title">
+    <canvas class="hero-art" id="hero-art" aria-hidden="true"></canvas>
+    <div class="wrap hero-inner" id="hero-inner">
       <p class="eyebrow">Welcome to the</p>
-      <h1>Electronics Overview</h1>
-      <p class="sub">Study Guide</p>
-      <div class="trace" aria-hidden="true">
-        <span class="term"></span>
-        <span class="wire"></span>
-        <svg viewBox="0 0 104 20" fill="none"><path d="M0 10h14l5-8 10 16 10-16 10 16 10-16 10 16 10-16 5 8h20" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
-        <span class="wire"></span>
-        <span class="term"></span>
+      <h1 id="hero-title">Electronics Overview</h1>
+      <p class="hero-sub">Study Guide</p>
+      <p class="hero-lede">Revision questions for DC circuits with every answer explained. Work through a study guide at your own pace, or test yourself with a random quiz.</p>
+      <div class="hero-actions">
+        <a class="btn btn-light" href="#study">
+          Choose a topic
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 4v12M5 11l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn-outline" href="notes/">My Notes</a>
       </div>
-    </div>
-    <div class="wrap cue-wrap">
-      <a class="cue" href="#study">
-        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 4v12M5 11l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Scroll to start studying
-      </a>
     </div>
   </section>
 
   <section class="study" id="study" aria-labelledby="study-title">
     <div class="wrap">
-      <h2 class="reveal" id="study-title">What do you want to study?</h2>
+      <div class="section-head reveal">
+        <p class="eyebrow">Topics</p>
+        <h2 id="study-title">What do you want to study?</h2>
+        <p class="section-lede">Open a study guide to go through every question with its answer, or start a random quiz to test yourself one question at a time.</p>
+      </div>
       <div class="cards" id="cards"></div>
     </div>
   </section>
+
+  <section class="how" aria-labelledby="how-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">How it works</p>
+        <h2 id="how-title">Three ways to study</h2>
+      </div>
+      <div class="features">
+        <div class="feature reveal">
+          <span class="f-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5v-13zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5v-13z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+          <h3>Study guides</h3>
+          <p>Every question from your assessments, in order, with the answer and the reason behind it. Answer each one and check it straight away.</p>
+        </div>
+        <div class="feature reveal">
+          <span class="f-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 7h4c2.5 0 3.5 1.5 5 5s2.5 5 5 5h4M3 17h4c1.5 0 2.5-.6 3.3-1.6M21 7h-4c-1.5 0-2.5.6-3.3 1.6M18 4l3 3-3 3M18 14l3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <h3>Random quizzes</h3>
+          <p>Questions one at a time in a new order every time. See your score at the end, then retry just the ones you missed.</p>
+        </div>
+        <div class="feature reveal">
+          <span class="f-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 4l4 4L9 19H5v-4L16 4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M13.5 6.5l4 4" stroke="currentColor" stroke-width="1.6"/></svg></span>
+          <h3>Your own notes</h3>
+          <p>Write notes for each topic. They save on this device, and you can download a backup to move them anywhere.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer class="site-foot">
+  <div class="wrap foot-grid">
+    <div>
+      <p class="foot-brand">Dos Santos Jesus</p>
+      <p class="foot-tag">Electronics Overview Study Guide</p>
+    </div>
+    <div>
+      <h3>Study guides</h3>
+      <ul id="foot-guides"></ul>
+    </div>
+    <div>
+      <h3>Quizzes and notes</h3>
+      <ul id="foot-tools"></ul>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>© <span id="year">2026</span> Dos Santos Jesus</span>
+    <a href="#" id="to-top">Back to top ↑</a>
+  </div>
+</footer>
 
 <script src="assets/site.js?v=8" data-root=""></script>
 <script>
@@ -260,22 +329,23 @@
   var ICON_TOPIC = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2 12h4l1.5-4 3 8 3-8 3 8 1.5-4H22" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var ICON_ARROW = '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-  function card(href, icon, kicker, title, meta, go) {
+  function link(href, text) {
     var a = document.createElement("a");
-    a.className = "card reveal";
     a.href = href;
-    a.innerHTML =
-      '<span class="card-icon">' + icon + "</span>" +
-      '<span class="card-kicker"></span>' +
-      '<span class="card-title"></span>' +
-      '<span class="card-meta"></span>' +
-      '<span class="card-go"><span></span>' + ICON_ARROW + "</span>";
-    a.querySelector(".card-kicker").textContent = kicker;
-    a.querySelector(".card-title").textContent = title;
-    a.querySelector(".card-meta").textContent = meta;
-    a.querySelector(".card-go span").textContent = go;
+    a.textContent = text;
     return a;
   }
+  function item(href, text) {
+    var li = document.createElement("li");
+    li.appendChild(link(href, text));
+    return li;
+  }
+
+  /* Header links, topic boxes and footer links all come from the site's list of pages */
+  var nav = document.getElementById("head-nav");
+  var cards = document.getElementById("cards");
+  var footGuides = document.getElementById("foot-guides");
+  var footTools = document.getElementById("foot-tools");
 
   function guideCard(g, it) {
     var c = document.createElement("article");
@@ -296,37 +366,132 @@
     if (it.quiz) c.querySelector('[data-k="quiz"]').href = SITE.root + it.quiz.href;
     return c;
   }
+  function linkCard(l) {
+    var a = document.createElement("a");
+    a.className = "card reveal";
+    a.href = SITE.root + l.href;
+    a.innerHTML =
+      '<span class="card-icon">' + (SITE.ICONS[l.icon] || "") + "</span>" +
+      '<span class="card-kicker">Personal</span>' +
+      '<span class="card-title"></span>' +
+      '<span class="card-meta"></span>' +
+      '<span class="card-go"><span>Open</span>' + ICON_ARROW + "</span>";
+    a.querySelector(".card-title").textContent = l.title;
+    a.querySelector(".card-meta").textContent = l.meta;
+    return a;
+  }
 
-  var cards = document.getElementById("cards");
   SITE.NAV.forEach(function (g) {
-    g.items.forEach(function (it) { cards.appendChild(guideCard(g, it)); });
+    g.items.forEach(function (it) {
+      nav.appendChild(link(SITE.root + it.href, it.title));
+      cards.appendChild(guideCard(g, it));
+      footGuides.appendChild(item(SITE.root + it.href, it.title));
+      if (it.quiz) footTools.appendChild(item(SITE.root + it.quiz.href, it.title + " quiz"));
+    });
   });
   SITE.LINKS.forEach(function (l) {
-    cards.appendChild(card(SITE.root + l.href, SITE.ICONS[l.icon] || "", "Personal", l.title, l.meta, "Open"));
+    nav.appendChild(link(SITE.root + l.href, l.title));
+    cards.appendChild(linkCard(l));
+    footTools.appendChild(item(SITE.root + l.href, l.title));
   });
 
-  Array.prototype.forEach.call(cards.children, function (c, i) {
-    c.setAttribute("data-fade-lag", String(i * 40));
+  document.getElementById("year").textContent = String(new Date().getFullYear());
+  document.getElementById("to-top").addEventListener("click", function (e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
+
+  /* Stagger boxes that sit side by side, then hand them to the shared scroll fade */
+  Array.prototype.forEach.call(cards.children, function (c, i) { c.setAttribute("data-fade-lag", String((i % 3) * 40)); });
+  Array.prototype.forEach.call(document.querySelectorAll(".feature"), function (f, i) { f.setAttribute("data-fade-lag", String(i * 40)); });
   SITE.reveal();
 
-  /* The welcome text drifts up and fades as you scroll down, and comes back as you scroll up */
+  /* Circuit-board pattern drawn behind the hero text */
+  var canvas = document.getElementById("hero-art");
+  function drawCircuit() {
+    var w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    var seed = 20261125;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    var step = w < 600 ? 22 : 28;
+    var cols = Math.ceil(w / step) + 1, rows = Math.ceil(h / step) + 1;
+    var DIRS = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
+    var used = {};
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    var traces = Math.round((cols * rows) / 9);
+    for (var t = 0; t < traces; t++) {
+      var x = Math.floor(rnd() * cols), y = Math.floor(rnd() * rows);
+      if (used[x + "," + y]) continue;
+      var dir = [0, 2, 4, 6][Math.floor(rnd() * 4)];
+      var len = 3 + Math.floor(rnd() * 10);
+      var alpha = 0.22 + rnd() * 0.3;
+      ctx.strokeStyle = "rgba(185, 201, 246," + alpha + ")";
+      ctx.fillStyle = "rgba(185, 201, 246," + alpha + ")";
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.arc(x * step, y * step, 2.6, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x * step, y * step);
+      for (var s = 0; s < len; s++) {
+        if (s > 0 && rnd() < 0.28) dir = (dir + (rnd() < 0.5 ? 1 : 7)) % 8;
+        var nx = x + DIRS[dir][0], ny = y + DIRS[dir][1];
+        if (used[nx + "," + ny]) break;
+        used[nx + "," + ny] = true;
+        x = nx; y = ny;
+        ctx.lineTo(x * step, y * step);
+      }
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(x * step, y * step, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    /* a few chips */
+    for (var c = 0; c < (w < 700 ? 0 : Math.max(2, Math.round(w / 420))); c++) {
+      var cx = Math.round((0.55 + rnd() * 0.4) * cols) * step;
+      var cy = Math.round((0.15 + rnd() * 0.7) * rows) * step;
+      var cw = step * (2 + Math.floor(rnd() * 2)), ch = step * 2;
+      ctx.strokeStyle = "rgba(185, 201, 246, 0.5)";
+      ctx.fillStyle = "rgba(10, 16, 40, 0.55)";
+      ctx.lineWidth = 1.4;
+      ctx.fillRect(cx, cy, cw, ch);
+      ctx.strokeRect(cx, cy, cw, ch);
+      for (var p = step / 2; p < cw; p += step / 2) {
+        ctx.beginPath();
+        ctx.moveTo(cx + p, cy); ctx.lineTo(cx + p, cy - 6);
+        ctx.moveTo(cx + p, cy + ch); ctx.lineTo(cx + p, cy + ch + 6);
+        ctx.stroke();
+      }
+    }
+  }
+  var resizeTimer = null;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(drawCircuit, 150);
+  });
+  drawCircuit();
+
+  /* The hero text drifts up and fades as you scroll down, and comes back as you scroll up */
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce) return;
-  var hero = document.querySelector(".hero");
-  var cueWrap = document.querySelector(".cue-wrap");
+  var heroInner = document.getElementById("hero-inner");
   var ticking = false;
   function scrub() {
     ticking = false;
     var p = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.6)));
-    hero.style.opacity = String(1 - p * 0.85);
-    hero.style.translate = "0 " + (-p * 48).toFixed(1) + "px";
-    cueWrap.style.opacity = String(Math.max(0, 1 - p * 2.5));
+    heroInner.style.opacity = String(1 - p * 0.85);
+    heroInner.style.translate = "0 " + (-p * 40).toFixed(1) + "px";
   }
   window.addEventListener("scroll", function () {
     if (!ticking) { ticking = true; requestAnimationFrame(scrub); }
   }, { passive: true });
-  window.addEventListener("resize", scrub);
   scrub();
 })();
 </script>
